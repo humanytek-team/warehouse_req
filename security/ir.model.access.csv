@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_warehouse_req_group_user,warehouse.req.user,model_warehouse_req,base.group_user,1,1,1,1
