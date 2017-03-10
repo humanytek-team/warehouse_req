@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <!--- TODO [IMP] -->
+        <record model="ir.actions.act_window" id="warehouse_req_list_action">
+            <field name="name">Requirements</field>
+            <field name="res_model">warehouse.req</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <data>
+            <menuitem id="warehouse_req_menu" name="Requirements" 
+                      parent="stock.menu_stock_inventory_control"
+                      action="warehouse_req_list_action"/>
+        </data>
     </data>
 </odoo>
