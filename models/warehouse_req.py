@@ -56,7 +56,7 @@ class WarehouseReq(models.Model):
     # deliver_to = fields.  # TODO field type
     # deliver_address = fields.  # TODO field type
     products_ids = fields.Many2many(
-        string="Field name",
+        string="Product",
         comodel_name="warehouse.req.product",
     )
 
