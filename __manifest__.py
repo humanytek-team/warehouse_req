@@ -23,10 +23,12 @@
     'version': '1.0',
     'author': 'Humanytek',
     'website': 'http://humanytek.com',
-    'depends': [],  # TODO [IMP]
+    'depends': [
+        'stock',
+    ],
     'data': [
         'security/ir.model.access.csv',
-        'security/warehouse_req_access_rules.xml',
+        # 'security/warehouse_req_access_rules.xml',
         'views/warehouse_req.xml',
     ]
 }

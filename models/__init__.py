@@ -19,3 +19,4 @@
 ##############################################################################
 
 from . import warehouse_req
+from . import warehouse_req_product
