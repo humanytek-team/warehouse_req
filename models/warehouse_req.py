@@ -6,9 +6,10 @@ from odoo import api, fields, models
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
 
-    folio = fields.Integer(required=True)
+    name = fields.Text(index=True, text="Folio", readonly=True)  # TODO autoincrement
     warehouse = fields.Many2one(
         comodel_name="stock.warehouse",
+        required=True,
         # ondelete=  # TODO
         # default=  # TODO
     )
@@ -23,6 +24,7 @@ class WarehouseReq(models.Model):
         selection=[
             # TODO
         ],
+        required=True,
     )
     reference_type = fields.Selection(
         selection=[
