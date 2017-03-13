@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
 
-    name = fields.Text(index=True, string="Folio", readonly=True)  # TODO autoincrement
+    name = fields.Char(index=True, string="Folio", readonly=True)  # TODO autoincrement
     warehouse = fields.Many2one(
         comodel_name="stock.warehouse",
         required=True,
@@ -38,6 +38,7 @@ class WarehouseReq(models.Model):
         # ondelete=  # TODO
         readonly=True,
         required=True,
+        string="Claimant",
     )
     state = fields.Selection(
         selection=[
@@ -55,9 +56,9 @@ class WarehouseReq(models.Model):
         domain="[('customer', '=', True)]",
         # ondelete=  # TODO
     )
-    # deliver_to = fields.  # TODO field type
-    # deliver_address = fields.  # TODO field type
-    products_ids = fields.Many2many(
+    deliver_to = fields.Char()  # TODO field type
+    deliver_address = fields.Char()  # TODO field type
+    products_ids = fields.One2many(
         string="Product",
         comodel_name="warehouse.req.product",
     )
