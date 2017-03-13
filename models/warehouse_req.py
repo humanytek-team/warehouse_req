@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
 
-    name = fields.Text(index=True, text="Folio", readonly=True)  # TODO autoincrement
+    name = fields.Text(index=True, string="Folio", readonly=True)  # TODO autoincrement
     warehouse = fields.Many2one(
         comodel_name="stock.warehouse",
         required=True,
@@ -15,7 +15,7 @@ class WarehouseReq(models.Model):
     )
     purchase_required = fields.Boolean(compute='_purchase_required')
     date_request = fields.Date(
-        string="Dato fo Request",
+        string="Date of Request",
         default=fields.Date.today,
         readonly=True,
     )
