@@ -58,7 +58,7 @@ class WarehouseReq(models.Model):
     )
     deliver_to = fields.Char()  # TODO field type
     deliver_address = fields.Char()  # TODO field type
-    products_ids = fields.One2many(
+    product_ids = fields.One2many(
         comodel_name="warehouse.req.product",
         inverse_name="warehouse_req_id",
         string="Products",

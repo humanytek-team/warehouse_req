@@ -31,7 +31,7 @@
                         </group>
                         <notebook>
                             <page string="Products">
-                                <field name="products_ids"/>
+                                <field name="product_ids"/>
                             </page>
                         </notebook>
                     </sheet>
