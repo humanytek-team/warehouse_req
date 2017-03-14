@@ -4,6 +4,13 @@ from odoo import api, fields, models
 class WarehouseReqProduct(models.Model):
     _name = 'warehouse.req.product'
 
+    warehouse_req_id = fields.Many2one(
+        comodel_name="warehouse_req.warehouse_req",
+        index=True,
+        ondelete="cascade",
+        required=True,
+        string="Requirement",
+    )
     product_id = fields.Many2one(
         comodel_name="product.template",  # TODO template vs product
         domain="[('purchase_ok', '=', True)]",
