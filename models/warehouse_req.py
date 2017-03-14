@@ -15,9 +15,9 @@ class WarehouseReq(models.Model):
     )
     purchase_required = fields.Boolean(compute='_purchase_required')
     date_request = fields.Date(
-        string="Date of Request",
         default=fields.Date.today,
         readonly=True,
+        string="Date of Request",
     )
     date_required = fields.Date()  # TODO check date_required >= date_request
     reason = fields.Selection(
@@ -51,16 +51,17 @@ class WarehouseReq(models.Model):
         ],
     )
     client_id = fields.Many2one(
-        string="Client",
         comodel_name="res.partner",
         domain="[('customer', '=', True)]",
+        string="Client",
         # ondelete=  # TODO
     )
     deliver_to = fields.Char()  # TODO field type
     deliver_address = fields.Char()  # TODO field type
     products_ids = fields.One2many(
-        string="Product",
         comodel_name="warehouse.req.product",
+        inverse_name="warehouse_req_id",
+        string="Products",
     )
 
     def _purchase_required(self):
