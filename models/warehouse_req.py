@@ -17,7 +17,7 @@ class WarehouseReq(models.Model):
         readonly=True,
         string='Date of Request',
     )
-    date_required = fields.Date()  # TODO check date_required >= date_request
+    date_required = fields.Date()
     reason = fields.Selection(
         selection=[
             ('production', 'Production'),
