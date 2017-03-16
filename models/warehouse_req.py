@@ -82,5 +82,5 @@ class WarehouseReq(models.Model):
     @api.constrains('date_required')
     def _check_date_required_ge_date_requested(self):
         for r in self:
-            if r.date_required < r.date_requested:
+            if r.date_required and r.date_required < r.date_requested:
                 raise exceptions.ValidationError(_("The date of requirement cannot be lower than the date of requestment"))
