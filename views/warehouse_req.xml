@@ -16,7 +16,7 @@
                                 <field name="claimant_id"/>
                                 <field name="warehouse"/>
                                 <field name="reason"/>
-                                <field name="date_request"/>
+                                <field name="date_requested"/>
                                 <field name="shipping_type"/>
                                 <field name="deliver_to"/>
                             </group>

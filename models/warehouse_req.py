@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import api, exceptions, fields, models, _
 
 # TODO Check fields required
 
@@ -12,7 +12,7 @@ class WarehouseReq(models.Model):
         required=True,
     )
     purchase_required = fields.Boolean(compute='_purchase_required')
-    date_request = fields.Date(
+    date_requested = fields.Date(
         default=fields.Date.today,
         readonly=True,
         string='Date of Request',
@@ -78,3 +78,9 @@ class WarehouseReq(models.Model):
 
     def _purchase_required(self):
         pass  # TODO
+
+    @api.constrains('date_required')
+    def _check_date_required_ge_date_requested(self):
+        for r in self:
+            if r.date_required < r.date_requested:
+                raise exceptions.ValidationError(_("The date of requirement cannot be lower than the date of requestment"))
