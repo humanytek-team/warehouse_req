@@ -6,6 +6,10 @@ class WarehouseReqProduct(models.Model):
 
     warehouse_req_id = fields.Many2one(
         comodel_name="warehouse.req",
+        index=True,
+        ondelete="cascade",
+        required=True,
+        string="Requirement",
     )
     product_id = fields.Many2one(
         comodel_name="product.template",  # TODO template vs product
