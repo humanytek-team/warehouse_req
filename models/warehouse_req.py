@@ -45,7 +45,7 @@ class WarehouseReq(models.Model):
     reference_folio = fields.Integer()
     claimant_id = fields.Many2one(
         comodel_name='res.users',
-        # default= # TODO current user
+        default=lambda self: self.env.uid,
         readonly=True,
         required=True,
         string='Claimant',
