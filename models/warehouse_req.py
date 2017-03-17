@@ -52,9 +52,11 @@ class WarehouseReq(models.Model):
     )
     state = fields.Selection(
         selection=[
+            ('draft', 'Draft'),
             ('required', 'Required'),
             ('approved', 'Approved'),
-            # TODO
+            ('done', 'Done'),
+            # TODO verify status
         ]
     )
     shipping_type = fields.Selection(
@@ -84,3 +86,19 @@ class WarehouseReq(models.Model):
         for r in self:
             if r.date_required and r.date_required < r.date_requested:
                 raise exceptions.ValidationError(_("The date of requirement cannot be lower than the date of requestment"))
+
+    @api.multi
+    def action_draft(self):
+        self.state = 'draft'
+
+    @api.multi
+    def action_require(self):
+        self.state = 'required'
+
+    @api.multi
+    def action_approve(self):
+        self.state = 'approved'
+
+    @api.multi
+    def action_done(self):
+        self.state = 'self'
