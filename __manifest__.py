@@ -27,6 +27,7 @@
         'stock',
     ],
     'data': [
+        'data/ir_sequence_data.xml',
         'security/ir.model.access.csv',
         # 'security/warehouse_req_access_rules.xml',
         'views/warehouse_req_workflow.xml',

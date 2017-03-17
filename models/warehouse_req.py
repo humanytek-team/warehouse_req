@@ -6,7 +6,14 @@ from odoo import api, exceptions, fields, models, _
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
 
-    name = fields.Char(index=True, string='Folio', readonly=True)  # TODO autoincrement
+    name = fields.Char(
+        copy=False,
+        default=lambda self: _('New'),
+        index=True,
+        string='Folio',
+        readonly=True,
+        required=True,
+    )
     warehouse = fields.Many2one(
         comodel_name='stock.warehouse',
         required=True,
@@ -102,3 +109,9 @@ class WarehouseReq(models.Model):
     @api.multi
     def action_done(self):
         self.state = 'self'
+
+    @api.model
+    def create(self, vals):
+        if vals.get('name', 'New') == 'New':
+            vals['name'] = self.env['ir.sequence'].next_by_code('warehouse.req')
+        return super(WarehouseReq, self).create(vals)

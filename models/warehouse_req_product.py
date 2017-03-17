@@ -19,7 +19,7 @@ class WarehouseReqProduct(models.Model):
         required=True,
     )
     specs = fields.Char()
-    on_hand  = fields.Float(
+    on_hand = fields.Float(
         default=lambda self: self.product_id.virtual_available,
         readonly=True,
         store=False,

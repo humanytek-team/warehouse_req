@@ -19,9 +19,13 @@
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
                         <group>
                             <group>
-                                <field name="name"/>
                                 <field name="claimant_id"/>
                                 <field name="warehouse"/>
                                 <field name="reason"/>
