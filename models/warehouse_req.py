@@ -92,7 +92,7 @@ class WarehouseReq(models.Model):
         store=False,
         string=_('# Items'),
     )
-    supplied_products_qty = field.Float(
+    supplied_products_qty = fields.Float(
         compute='_supplied_products_qty',
         store=False,
     )
