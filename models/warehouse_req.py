@@ -28,26 +28,26 @@ class WarehouseReq(models.Model):
     date_required = fields.Date()
     reason = fields.Selection(
         selection=[
-            ('production', 'Production'),
-            ('stock_cs', 'Stock CS'),
-            ('loan', 'Loan'),
-            ('warranty', 'Warranty'),
-            ('sale', 'Sale'),
-            ('reparation', 'Reparation'),
-            ('replacement', 'Replacement'),
-            ('internal', 'Internal Use'),
-            ('integration', 'Integration'),
-            ('minimal', 'Minimal Supplieres'),
+            ('production', _('Production')),
+            ('stock_cs', _('Stock CS')),
+            ('loan', _('Loan')),
+            ('warranty', _('Warranty')),
+            ('sale', _('Sale')),
+            ('reparation', _('Reparation')),
+            ('replacement', _('Replacement')),
+            ('internal', _('Internal Use')),
+            ('integration', _('Integration')),
+            ('minimal', _('Minimal Supplieres')),
         ],
         required=True,
     )
     reference_type = fields.Selection(
         selection=[
-            ('support', 'Support'),
-            ('kickoff', 'KickOff'),
-            ('project', 'Project'),
-            ('others', 'Others'),
-            ('bill', 'Bill of Materials'),
+            ('support', _('Support')),
+            ('kickoff', _('KickOff')),
+            ('project', _('Project')),
+            ('others', _('Others')),
+            ('bill', _('Bill of Materials')),
         ],
     )
     reference_folio = fields.Integer(
@@ -62,17 +62,17 @@ class WarehouseReq(models.Model):
     )
     state = fields.Selection(
         selection=[
-            ('draft', 'Draft'),
-            ('required', 'Required'),
-            ('approved', 'Approved'),
-            ('done', 'Done'),
+            ('draft', _('Draft')),
+            ('required', _('Required')),
+            ('approved', _('Approved')),
+            ('done', _('Done')),
             # TODO verify status
         ]
     )
     shipping_type = fields.Selection(
         selection=[
-            ('next', 'Next day'),
-            ('other', 'Other'),
+            ('next', _('Next day')),
+            ('other', _('Other')),
         ],
     )
     client_id = fields.Many2one(
