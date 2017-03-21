@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 class WarehouseReqProduct(models.Model):
@@ -6,17 +6,21 @@ class WarehouseReqProduct(models.Model):
 
     sequence = fields.Integer()
     warehouse_req_id = fields.Many2one(
-        comodel_name="warehouse.req",
+        comodel_name='warehouse.req',
         index=True,
-        ondelete="cascade",
+        ondelete='cascade',
         required=True,
-        string="Requirement",
+        string=_('Requirement'),
     )
-    name = fields.Char(related='product_id.name')
+    name = fields.Char(
+        related='product_id.name',
+        string=_('Description'),
+    )
     product_id = fields.Many2one(
-        comodel_name="product.template",  # TODO template vs product
+        comodel_name='product.template',
         domain="[('purchase_ok', '=', True)]",
         required=True,
+        string=_('Product'),
     )
     specs = fields.Char()
     on_hand = fields.Float(
@@ -24,11 +28,19 @@ class WarehouseReqProduct(models.Model):
         readonly=True,
         store=False,
     )
-    requested_qty = fields.Integer(required=True)
-    auothorized_qty = fields.Integer()  # readonly if no authorized
-    ordered_qty = fields.Integer(readonly=True)
-    supplied_qty = fields.Integer(readonly=True)
+    requested_qty = fields.Integer(
+        required=True,
+        string=_('Requested Qty'),
+    )
+    ordered_qty = fields.Integer(
+        readonly=True,
+        string=_('Ordered Qty'),
+    )
+    supplied_qty = fields.Integer(
+        readonly=True,
+        string=_('Supplied Qty'),
+    )
     suggested_supplier = fields.Many2one(
-        comodel_name="res.partner",
+        comodel_name='res.partner',
         domain="[('supplier', '=', True)]",
     )

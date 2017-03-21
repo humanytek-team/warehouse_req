@@ -27,7 +27,7 @@
                         <group>
                             <group>
                                 <field name="claimant_id"/>
-                                <field name="warehouse"/>
+                                <field name="warehouse_id"/>
                                 <field name="reason"/>
                                 <field name="date_requested"/>
                                 <field name="shipping_type"/>
@@ -47,14 +47,13 @@
                                 <field name="product_ids" mode="tree">
                                     <tree string="Requirement Order Lines" editable="bottom">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="product_id" string="Product"/>
-                                        <field name="name" string="Description"/>
+                                        <field name="product_id"/>
+                                        <field name="name"/>
                                         <field name="specs"/>
                                         <field name="on_hand"/>
-                                        <field name="requested_qty" string="Requested Qty"/>
-                                        <field name="auothorized_qty" string="Auth. Qty"/>
-                                        <field name="ordered_qty" string="Ordered Qty"/>
-                                        <field name="supplied_qty" string="Supplied Qty"/>
+                                        <field name="requested_qty"/>
+                                        <field name="ordered_qty"/>
+                                        <field name="supplied_qty"/>
                                         <field name="suggested_supplier"/>
                                     </tree>
                                 </field>
@@ -62,6 +61,24 @@
                         </notebook>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="warehouse_req_tree_view">
+            <field name="name">warehouse.req.form</field>
+            <field name="model">warehouse.req</field>
+            <field name="arch" type="xml">
+                <tree string="Requeriments Tree">
+                    <field name="claimant_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="name"/>
+                    <field name="date_requested"/>
+                    <field name="date_required"/>
+                    <field name="state"/>
+                    <field name="reason"/>
+                    <field name="reference_folio"/>
+                    <field name="products_qty"/>
+                </tree>
             </field>
         </record>
 
