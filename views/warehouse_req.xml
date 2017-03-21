@@ -74,7 +74,7 @@
                     <field name="state"/>
                     <field name="reason"/>
                     <field name="reference_folio"/>
-                    <field name="products_qty"/>
+                    <field name="requested_products_qty"/>
                 </tree>
             </field>
         </record>

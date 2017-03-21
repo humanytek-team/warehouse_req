@@ -87,19 +87,28 @@ class WarehouseReq(models.Model):
         inverse_name='warehouse_req_id',
         string=_('Products'),
     )
-    products_qty = fields.Float(
-        compute='_products_qty',
+    requested_products_qty = fields.Float(
+        compute='_requested_products_qty',
         store=False,
         string=_('# Items'),
+    )
+    supplied_products_qty = field.Float(
+        compute='_supplied_products_qty',
+        store=False,
     )
 
     def _purchase_required(self):
         pass  # TODO
 
     @api.depends('product_ids')
-    def _products_qty(self):
+    def _requested_products_qty(self):
         for r in self:
-            r.products_qty = sum(p.requested_qty for p in r.product_ids)
+            r.requested_products_qty = sum(p.requested_qty for p in r.product_ids)
+
+    @api.depends('product_ids')
+    def _supplied_products_qty(self):
+        for r in self:
+            r.supplied_products_qty = sum(p.supplied_qty for p in r.product_ids)
 
     @api.constrains('date_required')
     def _check_date_required_ge_date_requested(self):
