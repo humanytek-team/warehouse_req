@@ -13,9 +13,6 @@
                         <button name="approve" type="workflow"
                                 string="Approve" states="required"
                                 class="oe_highlight"/>
-                        <!-- <button name="action_check_supplied" type="object" TODO
-                                string="Check Supplied" states="approved"
-                                class="oe_highlight"/> -->
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>

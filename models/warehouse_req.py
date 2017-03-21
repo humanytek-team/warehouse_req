@@ -80,8 +80,8 @@ class WarehouseReq(models.Model):
         domain="[('customer', '=', True)]",
         string=_('Client'),
     )
-    deliver_to = fields.Char()  # TODO field type
-    deliver_address = fields.Char()  # TODO field type
+    deliver_to = fields.Char()
+    deliver_address = fields.Char()
     product_ids = fields.One2many(
         comodel_name='warehouse.req.product',
         inverse_name='warehouse_req_id',
