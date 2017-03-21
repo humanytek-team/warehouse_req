@@ -130,7 +130,7 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_done(self):
-        self.state = 'self'
+        self.state = 'done'
 
     @api.model
     def create(self, vals):
