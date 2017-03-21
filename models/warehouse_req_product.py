@@ -28,15 +28,15 @@ class WarehouseReqProduct(models.Model):
         readonly=True,
         store=False,
     )
-    requested_qty = fields.Integer(
+    requested_qty = fields.Float(
         required=True,
         string=_('Requested Qty'),
     )
-    ordered_qty = fields.Integer(
+    ordered_qty = fields.Float(
         readonly=True,
         string=_('Ordered Qty'),
     )
-    supplied_qty = fields.Integer(
+    supplied_qty = fields.Float(
         readonly=True,
         string=_('Supplied Qty'),
     )
