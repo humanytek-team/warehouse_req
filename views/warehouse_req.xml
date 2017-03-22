@@ -24,24 +24,24 @@
                         <group>
                             <group>
                                 <field name="claimant_id"/>
-                                <field name="warehouse_id"/>
-                                <field name="reason"/>
+                                <field name="warehouse_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="reason" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="date_requested"/>
-                                <field name="shipping_type"/>
-                                <field name="deliver_to"/>
+                                <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                             </group>
                             <group>
                                 <field name="purchase_required"/>
-                                <field name="reference_type"/>
-                                <field name="reference_folio"/>
-                                <field name="date_required"/>
-                                <field name="client_id"/>
-                                <field name="deliver_address"/>
+                                <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                             </group>
                         </group>
                         <notebook>
                             <page string="Products">
-                                <field name="product_ids" mode="tree">
+                                <field name="product_ids" mode="tree" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}">
                                     <tree string="Requirement Order Lines" editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="product_id"/>
