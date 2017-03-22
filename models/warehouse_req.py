@@ -19,7 +19,10 @@ class WarehouseReq(models.Model):
         required=True,
         string=_('Warehouse'),
     )
-    purchase_required = fields.Boolean(compute='_purchase_required')
+    purchase_required = fields.Boolean(
+        compute='_purchase_required',
+        store=False,
+    )
     date_requested = fields.Date(
         default=fields.Date.today,
         readonly=True,
@@ -97,8 +100,15 @@ class WarehouseReq(models.Model):
         store=False,
     )
 
+    @api.depends('product_ids')
     def _purchase_required(self):
-        pass  # TODO
+        for r in self:
+            for p in r.product_ids:
+                if p.on_hand < p.requested_qty:
+                    r.purchase_required = True
+                    break
+            else:
+                r.purchase_required = False
 
     @api.depends('product_ids')
     def _requested_products_qty(self):
