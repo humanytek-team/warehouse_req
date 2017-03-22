@@ -66,8 +66,8 @@ class WarehouseReq(models.Model):
             ('required', _('Required')),
             ('approved', _('Approved')),
             ('done', _('Done')),
-            # TODO verify status
-        ]
+        ],
+        default='draft',
     )
     shipping_type = fields.Selection(
         selection=[
