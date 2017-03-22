@@ -13,7 +13,9 @@ class WarehouseReqProduct(models.Model):
         string=_('Requirement'),
     )
     name = fields.Char(
+        readonly=True,
         related='product_id.name',
+        store=False,
         string=_('Description'),
     )
     product_id = fields.Many2one(
