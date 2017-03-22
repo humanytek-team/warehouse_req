@@ -24,7 +24,7 @@ class WarehouseReqProduct(models.Model):
     )
     specs = fields.Char()
     on_hand = fields.Float(
-        default=lambda self: self.product_id.virtual_available,
+        compute="_on_hand",
         readonly=True,
         store=False,
     )
@@ -44,3 +44,8 @@ class WarehouseReqProduct(models.Model):
         comodel_name='res.partner',
         domain="[('supplier', '=', True)]",
     )
+
+    @api.depends('product_id')
+    def _on_hand(self):
+        for r in self:
+            r.on_hand = r.product_id.qty_available
