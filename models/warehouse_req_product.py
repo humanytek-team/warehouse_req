@@ -39,7 +39,6 @@ class WarehouseReqProduct(models.Model):
         string=_('Ordered Qty'),
     )
     supplied_qty = fields.Float(
-        readonly=True,
         string=_('Supplied Qty'),
     )
     suggested_supplier = fields.Many2one(

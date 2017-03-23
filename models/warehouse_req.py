@@ -136,6 +136,12 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_approve(self):
+        if purchase_required:
+            for p in product_ids:
+                # TODO Reserve products
+                if p.on_hand < p.requested_qty:
+                    # TODO create purchase order
+                    p.ordered_qty = p.requested_qty - p.on_hand
         self.state = 'approved'
 
     @api.multi
