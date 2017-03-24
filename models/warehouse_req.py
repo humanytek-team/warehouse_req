@@ -1,8 +1,6 @@
 from odoo import api, exceptions, fields, models, _, SUPERUSER_ID
 from odoo.exceptions import ValidationError
 
-# TODO make editable only by creator
-
 
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
@@ -148,7 +146,7 @@ class WarehouseReq(models.Model):
         if len(self.product_ids) > 0:
             self.state = 'required'
         else:
-            pass  # TODO error message
+            raise exceptions.ValidationError(_('Porduct lines needed'))
 
     @api.multi
     def action_approve(self):
@@ -158,17 +156,17 @@ class WarehouseReq(models.Model):
         picking_type_id = self.env['stock.picking.type'].browse(9)
         stock_picking_dict = {
             'location_id': self.warehouse_id.id,
-            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # TODO sure?
+            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # FIXME sure?
             'min_date': self.date_required,
             'origin': self.name,
-            'partner_id': self.product_ids[0].product_id.seller_ids[0].id,
-            'picking_type_id': picking_type_id.id,  # TODO 9, 4, 14 ?
+            'partner_id': self.product_ids[0].product_id.seller_ids[0].id,  # FIXME sure?
+            'picking_type_id': picking_type_id.id,  # FIXME 9, 4, 14 ?
         }
         self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
         for p in self.product_ids:
             stock_move_dict = {
                 'location_id': self.warehouse_id.id,
-                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # TODO sure?
+                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # FIXME sure?
                 'name': p.product_id.name,
                 'origin': self.name,
                 'picking_id': self.stock_picking_id.id,
@@ -183,7 +181,7 @@ class WarehouseReq(models.Model):
             purchase_order_dict = {
                 'date_planned': self.date_required,
                 'name': 'New',
-                'partner_id': self.product_ids[0].product_id.seller_ids[0].id,
+                'partner_id': self.product_ids[0].product_id.seller_ids[0].id,  # FIXME sure?
                 'origin': self.name,
             }
             self.purchase_order_id = self.env['purchase.order'].create(purchase_order_dict)

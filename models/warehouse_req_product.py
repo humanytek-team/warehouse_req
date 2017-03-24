@@ -36,7 +36,7 @@ class WarehouseReqProduct(models.Model):
         readonly=True,
         string=_('Ordered Qty'),
     )
-    supplied_qty = fields.Float(  # TODO bilateral
+    supplied_qty = fields.Float(  # IDEA bilateral
         compute='_supplied_qty',
         readonly=True,
         store=False,
