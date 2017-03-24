@@ -1,5 +1,6 @@
 from odoo import api, exceptions, fields, models, _
 
+# TODO make editable only by creator
 
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
@@ -95,7 +96,7 @@ class WarehouseReq(models.Model):
         store=False,
         string=_('# Items'),
     )
-    supplied_products_qty = fields.Float(
+    supplied_products_qty = fields.Float( # TODO use the stock_picking_id status instead
         compute='_supplied_products_qty',
         store=False,
     )

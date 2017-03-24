@@ -8,7 +8,6 @@ class WarehouseReqProduct(models.Model):
     warehouse_req_id = fields.Many2one(
         comodel_name='warehouse.req',
         index=True,
-        ondelete='cascade',
         required=True,
         string=_('Requirement'),
     )
@@ -37,7 +36,7 @@ class WarehouseReqProduct(models.Model):
         readonly=True,
         string=_('Ordered Qty'),
     )
-    supplied_qty = fields.Float(
+    supplied_qty = fields.Float( # TODO bilateral
         compute='_supplied_qty',
         readonly=True,
         store=False,
