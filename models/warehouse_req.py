@@ -1,4 +1,5 @@
-from odoo import api, exceptions, fields, models, _
+from odoo import api, exceptions, fields, models, _, SUPERUSER_ID
+from odoo.exceptions import ValidationError
 
 # TODO make editable only by creator
 
@@ -151,6 +152,9 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_approve(self):
+        if self.env.uid != SUPERUSER_ID and self.env.uid == self.claimant_id.id:
+            raise exceptions.ValidationError(_('You can not approve your own requirements'))
+
         picking_type_id = self.env['stock.picking.type'].browse(9)
         stock_picking_dict = {
             'location_id': self.warehouse_id.id,
@@ -163,7 +167,6 @@ class WarehouseReq(models.Model):
         self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
         for p in self.product_ids:
             stock_move_dict = {
-                'date_planned': self.date_required,
                 'location_id': self.warehouse_id.id,
                 'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # TODO sure?
                 'name': p.product_id.name,

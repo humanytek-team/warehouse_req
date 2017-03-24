@@ -12,7 +12,8 @@
                                 class="oe_highlight"/>
                         <button name="approve" type="workflow"
                                 string="Approve" states="required"
-                                class="oe_highlight"/>
+                                class="oe_highlight"
+                                groups="warehouse_req.approver"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
