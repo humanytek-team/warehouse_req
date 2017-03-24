@@ -1,7 +1,5 @@
 from odoo import api, exceptions, fields, models, _
 
-# TODO Check fields required
-
 
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
@@ -99,6 +97,11 @@ class WarehouseReq(models.Model):
         compute='_supplied_products_qty',
         store=False,
     )
+    purchase_order_id = fields.Many2one(
+        comodel_name='purchase.order',
+        readonly=True,
+        string='Purchase order',
+    )
 
     @api.depends('product_ids')
     def _purchase_required(self):
@@ -132,16 +135,37 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_require(self):
-        self.state = 'required'
+        if len(self.product_ids) > 0:
+            self.state = 'required'
+        else :
+            pass # TODO error message
 
     @api.multi
     def action_approve(self):
-        if purchase_required:
-            for p in product_ids:
-                # TODO Reserve products
-                if p.on_hand < p.requested_qty:
-                    # TODO create purchase order
-                    p.ordered_qty = p.requested_qty - p.on_hand
+        # TODO Reserve products
+        if self.purchase_required:
+            purchase_order_dict = {
+                'date_planned': self.date_required,
+                'name': 'New',
+                'partner_id': self.product_ids[0].product_id.seller_ids[0].id,
+                'origin': self.name,
+            }
+            self.purchase_order_id = self.env['purchase.order'].create(purchase_order_dict);
+
+            for p in self.product_ids:
+                if self.purchase_required:
+                    if p.on_hand < p.requested_qty:
+                        p.ordered_qty = p.requested_qty - p.on_hand
+                        purchase_order_line_dict = {
+                            'date_planned': self.date_required,
+                            'name': p.product_id.name,
+                            'order_id': self.purchase_order_id.id,
+                            'price_unit': p.product_id.list_price,
+                            'product_id': p.product_id.id,
+                            'product_qty': p.ordered_qty,
+                            'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
+                        }
+                        self.env['purchase.order.line'].create(purchase_order_line_dict)
         self.state = 'approved'
 
     @api.multi

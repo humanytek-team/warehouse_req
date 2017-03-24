@@ -37,6 +37,7 @@
                                 <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="purchase_order_id"/>
                             </group>
                         </group>
                         <notebook>

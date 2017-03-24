@@ -24,13 +24,14 @@
     'author': 'Humanytek',
     'website': 'http://humanytek.com',
     'depends': [
+        'purchase',
         'stock',
     ],
     'data': [
         'data/ir_sequence_data.xml',
         'security/ir.model.access.csv',
         # 'security/warehouse_req_access_rules.xml',
-        'views/warehouse_req_workflow.xml',
         'views/warehouse_req.xml',
+        'workflows/warehouse_req_workflow.xml',
     ]
 }
