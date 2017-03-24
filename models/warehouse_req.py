@@ -153,14 +153,14 @@ class WarehouseReq(models.Model):
         if self.env.uid != SUPERUSER_ID and self.env.uid == self.claimant_id.id:
             raise exceptions.ValidationError(_('You can not approve your own requirements'))
 
-        picking_type_id = self.env['stock.picking.type'].browse(9)
+        picking_type_id = self.env['stock.picking.type'].browse(9)  # FIXME magic numbers?
         stock_picking_dict = {
             'location_id': self.warehouse_id.id,
             'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # FIXME magic numbers?
             'min_date': self.date_required,
             'origin': self.name,
             'partner_id': self.product_ids[0].product_id.seller_ids[0].name.id,  # FIXME magic numbers?
-            'picking_type_id': picking_type_id.id,  # FIXME 9, 4, 14 ?
+            'picking_type_id': picking_type_id.id,
         }
         self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
         for p in self.product_ids:
