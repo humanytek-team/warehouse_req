@@ -2,6 +2,7 @@ from odoo import api, exceptions, fields, models, _
 
 # TODO make editable only by creator
 
+
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
 
@@ -96,7 +97,7 @@ class WarehouseReq(models.Model):
         store=False,
         string=_('# Items'),
     )
-    supplied_products_qty = fields.Float( # TODO use the stock_picking_id status instead
+    supplied_products_qty = fields.Float(  # TODO use the stock_picking_id status instead
         compute='_supplied_products_qty',
         store=False,
     )
@@ -145,26 +146,26 @@ class WarehouseReq(models.Model):
     def action_require(self):
         if len(self.product_ids) > 0:
             self.state = 'required'
-        else :
-            pass # TODO error message
+        else:
+            pass  # TODO error message
 
     @api.multi
     def action_approve(self):
         picking_type_id = self.env['stock.picking.type'].browse(9)
         stock_picking_dict = {
             'location_id': self.warehouse_id.id,
-            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id, # TODO sure?
+            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # TODO sure?
             'min_date': self.date_required,
             'origin': self.name,
             'partner_id': self.product_ids[0].product_id.seller_ids[0].id,
-            'picking_type_id': picking_type_id.id, # TODO 9, 4, 14 ?
+            'picking_type_id': picking_type_id.id,  # TODO 9, 4, 14 ?
         }
         self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
         for p in self.product_ids:
             stock_move_dict = {
                 'date_planned': self.date_required,
                 'location_id': self.warehouse_id.id,
-                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id, # TODO sure?
+                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # TODO sure?
                 'name': p.product_id.name,
                 'origin': self.name,
                 'picking_id': self.stock_picking_id.id,
@@ -182,7 +183,7 @@ class WarehouseReq(models.Model):
                 'partner_id': self.product_ids[0].product_id.seller_ids[0].id,
                 'origin': self.name,
             }
-            self.purchase_order_id = self.env['purchase.order'].create(purchase_order_dict);
+            self.purchase_order_id = self.env['purchase.order'].create(purchase_order_dict)
 
             for p in self.product_ids:
                 if self.purchase_required:
