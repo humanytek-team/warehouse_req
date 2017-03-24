@@ -146,7 +146,7 @@ class WarehouseReq(models.Model):
         if len(self.product_ids) > 0:
             self.state = 'required'
         else:
-            raise exceptions.ValidationError(_('Porduct lines needed'))
+            raise exceptions.ValidationError(_('Product lines needed'))
 
     @api.multi
     def action_approve(self):

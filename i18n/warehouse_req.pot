@@ -1,0 +1,449 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* warehouse_req
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-24 17:41+0000\n"
+"PO-Revision-Date: 2017-03-24 17:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:97
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_requested_products_qty
+#, python-format
+msgid "# Items"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_form_view
+msgid "Approve"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:71
+#: selection:warehouse.req,state:0
+#, python-format
+msgid "Approved"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:54
+#: selection:warehouse.req,reference_type:0
+#, python-format
+msgid "Bill of Materials"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:65
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_claimant_id
+#, python-format
+msgid "Claimant"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:85
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_client_id
+#, python-format
+msgid "Client"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_create_uid
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_create_date
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_create_date
+msgid "Created on"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:28
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_date_requested
+#, python-format
+msgid "Date of Request"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_date_required
+msgid "Date required"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_deliver_address
+msgid "Deliver address"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_deliver_to
+msgid "Deliver to"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req_product.py:18
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_name
+#, python-format
+msgid "Description"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_display_name
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:72
+#: selection:warehouse.req,state:0
+#, python-format
+msgid "Done"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:69
+#: selection:warehouse.req,state:0
+#, python-format
+msgid "Draft"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:12
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_name
+#, python-format
+msgid "Folio"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_id
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_id
+msgid "ID"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:43
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Integration"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:42
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Internal Use"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:51
+#: selection:warehouse.req,reference_type:0
+#, python-format
+msgid "KickOff"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req___last_update
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product___last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_write_uid
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_write_date
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:37
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Loan"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:44
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Minimal Supplieres"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:10
+#, python-format
+msgid "New"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:78
+#: selection:warehouse.req,shipping_type:0
+#, python-format
+msgid "Next day"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_on_hand
+msgid "On hand"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req_product.py:37
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_ordered_qty
+#, python-format
+msgid "Ordered Qty"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:79
+#: selection:warehouse.req,shipping_type:0
+#, python-format
+msgid "Other"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:53
+#: selection:warehouse.req,reference_type:0
+#, python-format
+msgid "Others"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:149
+#, python-format
+msgid "Porduct lines needed"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req_product.py:23
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_product_id
+#, python-format
+msgid "Product"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:35
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Production"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:92
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_ids
+#: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_form_view
+#, python-format
+msgid "Products"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:52
+#: selection:warehouse.req,reference_type:0
+#, python-format
+msgid "Project"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_purchase_order_id
+msgid "Purchase order"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_purchase_required
+msgid "Purchase required"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_reason
+msgid "Reason"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:58
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_reference_folio
+#, python-format
+msgid "Reference"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_reference_type
+msgid "Reference type"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:40
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Reparation"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:41
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Replacement"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_tree_view
+msgid "Requeriments Tree"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req_product.py:33
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_requested_qty
+#, python-format
+msgid "Requested Qty"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_form_view
+msgid "Require"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:70
+#: selection:warehouse.req,state:0
+#, python-format
+msgid "Required"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req_product.py:12
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_warehouse_req_id
+#, python-format
+msgid "Requirement"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_form_view
+msgid "Requirement Form"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_form_view
+msgid "Requirement Order Lines"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.actions.act_window,name:warehouse_req.warehouse_req_list_action
+#: model:ir.ui.menu,name:warehouse_req.warehouse_req_menu
+msgid "Requirements"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:39
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Sale"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_shipping_type
+msgid "Shipping type"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_specs
+msgid "Specs"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_state
+msgid "State"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:36
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Stock CS"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_stock_picking_id
+msgid "Stock picking"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_suggested_supplier
+msgid "Suggested supplier"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req_product.py:43
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_product_supplied_qty
+#, python-format
+msgid "Supplied Qty"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_supplied_products_qty
+msgid "Supplied products qty"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:50
+#: selection:warehouse.req,reference_type:0
+#, python-format
+msgid "Support"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:138
+#, python-format
+msgid "The date of requirement cannot be lower than the date of requestment"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:19
+#: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_warehouse_id
+#, python-format
+msgid "Warehouse"
+msgstr ""
+
+#. module: warehouse_req
+#: model:res.groups,name:warehouse_req.approver
+msgid "Warehouse Requirements / Approver"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:38
+#: selection:warehouse.req,reason:0
+#, python-format
+msgid "Warranty"
+msgstr ""
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:154
+#, python-format
+msgid "You can not approve your own requirements"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model,name:warehouse_req.model_warehouse_req
+msgid "warehouse.req"
+msgstr ""
+
+#. module: warehouse_req
+#: model:ir.model,name:warehouse_req.model_warehouse_req_product
+msgid "warehouse.req.product"
+msgstr ""
