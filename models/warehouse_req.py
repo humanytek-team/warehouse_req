@@ -26,7 +26,9 @@ class WarehouseReq(models.Model):
         readonly=True,
         string=_('Date of Request'),
     )
-    date_required = fields.Date()
+    date_required = fields.Date(
+        required=True,
+    )
     reason = fields.Selection(
         selection=[
             ('production', _('Production')),
@@ -102,6 +104,11 @@ class WarehouseReq(models.Model):
         readonly=True,
         string='Purchase order',
     )
+    stock_picking_id = fields.Many2one(
+        comodel_name='stock.picking',
+        readonly=True,
+        string='Stock picking',
+    )
 
     @api.depends('product_ids')
     def _purchase_required(self):
@@ -142,7 +149,31 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_approve(self):
-        # TODO Reserve products
+        picking_type_id = self.env['stock.picking.type'].browse(9)
+        stock_picking_dict = {
+            'location_id': self.warehouse_id.id,
+            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id, # TODO sure?
+            'min_date': self.date_required,
+            'origin': self.name,
+            'partner_id': self.product_ids[0].product_id.seller_ids[0].id,
+            'picking_type_id': picking_type_id.id, # TODO 9, 4, 14 ?
+        }
+        self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
+        for p in self.product_ids:
+            stock_move_dict = {
+                'date_planned': self.date_required,
+                'location_id': self.warehouse_id.id,
+                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id, # TODO sure?
+                'name': p.product_id.name,
+                'origin': self.name,
+                'picking_id': self.stock_picking_id.id,
+                'price_unit': p.product_id.list_price,
+                'product_id': p.product_id.id,
+                'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
+                'product_uom_qty': p.requested_qty,
+            }
+            self.env['stock.move'].create(stock_move_dict)
+
         if self.purchase_required:
             purchase_order_dict = {
                 'date_planned': self.date_required,

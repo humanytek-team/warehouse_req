@@ -29,6 +29,7 @@
                                 <field name="date_requested"/>
                                 <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                                <field name="stock_picking_id"/>
                             </group>
                             <group>
                                 <field name="purchase_required"/>

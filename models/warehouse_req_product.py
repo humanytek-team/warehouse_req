@@ -19,8 +19,7 @@ class WarehouseReqProduct(models.Model):
         string=_('Description'),
     )
     product_id = fields.Many2one(
-        comodel_name='product.template',
-        domain="[('purchase_ok', '=', True)]",
+        comodel_name='product.product',
         required=True,
         string=_('Product'),
     )
@@ -39,6 +38,9 @@ class WarehouseReqProduct(models.Model):
         string=_('Ordered Qty'),
     )
     supplied_qty = fields.Float(
+        compute='_supplied_qty',
+        readonly=True,
+        store=False,
         string=_('Supplied Qty'),
     )
     suggested_supplier = fields.Many2one(
@@ -50,3 +52,9 @@ class WarehouseReqProduct(models.Model):
     def _on_hand(self):
         for r in self:
             r.on_hand = r.product_id.qty_available
+
+    @api.depends('product_id', 'warehouse_req_id.stock_picking_id')
+    def _supplied_qty(self):
+        for r in self:
+            operations = r.warehouse_req_id.stock_picking_id.pack_operation_product_ids
+            r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
