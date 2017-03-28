@@ -48,10 +48,5 @@
             <field name="act_to" ref="done"/>
             <field name="signal">done</field>
         </record>
-        <record model="workflow.transition" id="warehouse_req_auto_done_products_have_been_supplied">
-            <field name="act_from" ref="approved"/>
-            <field name="act_to" ref="done"/>
-            <field name="condition">requested_products_qty == supplied_products_qty</field>
-        </record>
     </data>
 </odoo>

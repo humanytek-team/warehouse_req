@@ -213,7 +213,10 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_done(self):
-        self.state = 'done'
+        if self.stock_picking_id.state != 'done':
+            raise exceptions.ValidationError(_('Stock picking not done'))
+        else:
+            self.state = 'done'
 
     @api.model
     def create(self, vals):
