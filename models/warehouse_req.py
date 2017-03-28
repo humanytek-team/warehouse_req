@@ -183,6 +183,8 @@ class WarehouseReq(models.Model):
                 'product_uom_qty': p.requested_qty,
             }
             self.env['stock.move'].create(stock_move_dict)
+        self.stock_picking_id.action_confirm()
+        self.stock_picking_id.action_assign()
 
         if self.purchase_required:
             purchase_order_dict = {
