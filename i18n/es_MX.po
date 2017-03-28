@@ -25,14 +25,14 @@ msgstr "# Items"
 #. module: warehouse_req
 #: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_form_view
 msgid "Approve"
-msgstr "Aprovar"
+msgstr "Aprobar"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req.py:71
 #: selection:warehouse.req,state:0
 #, python-format
 msgid "Approved"
-msgstr "Aprovado"
+msgstr "Aprobado"
 
 
 #. module: warehouse_req
@@ -366,7 +366,7 @@ msgstr "Almacén"
 #. module: warehouse_req
 #: model:res.groups,name:warehouse_req.approver
 msgid "Warehouse Requirements / Approver"
-msgstr "Requerimientos de alamacen / Autorizador"
+msgstr "Requerimientos de alamacén / Autorizador"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req.py:38
@@ -379,4 +379,4 @@ msgstr "Garantía"
 #: code:addons/warehouse_req/models/warehouse_req.py:154
 #, python-format
 msgid "You can not approve your own requirements"
-msgstr "No puedes aprovar tus propios requerimientos"
+msgstr "No puedes aprobar tus propios requerimientos"

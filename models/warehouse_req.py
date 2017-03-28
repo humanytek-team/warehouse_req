@@ -41,7 +41,7 @@ class WarehouseReq(models.Model):
             ('replacement', _('Replacement')),
             ('internal', _('Internal Use')),
             ('integration', _('Integration')),
-            ('minimal', _('Minimal Supplieres')),
+            ('minimal', _('Minimal Suppliers')),
         ],
         required=True,
     )
