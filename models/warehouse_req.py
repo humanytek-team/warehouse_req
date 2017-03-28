@@ -153,20 +153,27 @@ class WarehouseReq(models.Model):
         if self.env.uid != SUPERUSER_ID and self.env.uid == self.claimant_id.id:
             raise exceptions.ValidationError(_('You can not approve your own requirements'))
 
+        for p in self.product_ids:
+            if p.product_id.seller_ids[0]:
+                partner_id = p.product_id.seller_ids[0].name.id
+                break
+        else:
+            raise exceptions.ValidationError(_('No product has supplier'))
+
         picking_type_id = self.env['stock.picking.type'].browse(9)  # FIXME magic numbers?
         stock_picking_dict = {
-            'location_id': self.warehouse_id.id,
-            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # FIXME magic numbers?
+            'location_id': self.warehouse_id.lot_stock_id.id,
+            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
             'min_date': self.date_required,
             'origin': self.name,
-            'partner_id': self.product_ids[0].product_id.seller_ids[0].name.id,  # FIXME magic numbers?
+            'partner_id': partner_id,
             'picking_type_id': picking_type_id.id,
         }
         self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
         for p in self.product_ids:
             stock_move_dict = {
-                'location_id': self.warehouse_id.id,
-                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[1].id,  # FIXME magic numbers?
+                'location_id': self.warehouse_id.lot_stock_id.id,
+                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
                 'name': p.product_id.name,
                 'origin': self.name,
                 'picking_id': self.stock_picking_id.id,
@@ -181,7 +188,7 @@ class WarehouseReq(models.Model):
             purchase_order_dict = {
                 'date_planned': self.date_required,
                 'name': 'New',
-                'partner_id': self.product_ids[0].product_id.seller_ids[0].name.id,  # FIXME magic numbers?
+                'partner_id': partner_id,
                 'origin': self.name,
             }
             self.purchase_order_id = self.env['purchase.order'].create(purchase_order_dict)
