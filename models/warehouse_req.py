@@ -18,10 +18,6 @@ class WarehouseReq(models.Model):
         required=True,
         string=_('Warehouse'),
     )
-    purchase_required = fields.Boolean(
-        compute='_purchase_required',
-        store=False,
-    )
     date_requested = fields.Date(
         default=fields.Date.today,
         readonly=True,
@@ -100,26 +96,22 @@ class WarehouseReq(models.Model):
         compute='_supplied_products_qty',
         store=False,
     )
-    purchase_order_id = fields.Many2one(
-        comodel_name='purchase.order',
-        readonly=True,
-        string='Purchase order',
+    ordered = fields.Boolean(
+        default=False
     )
-    stock_picking_id = fields.Many2one(
-        comodel_name='stock.picking',
-        readonly=True,
-        string='Stock picking',
+    picked = fields.Boolean(
+        default=False
     )
-
-    @api.depends('product_ids')
-    def _purchase_required(self):
-        for r in self:
-            for p in r.product_ids:
-                if p.on_hand < p.requested_qty:
-                    r.purchase_required = True
-                    break
-            else:
-                r.purchase_required = False
+    # purchase_order_id = fields.Many2one(
+    #     comodel_name='purchase.order',
+    #     readonly=True,
+    #     string='Purchase order',
+    # )
+    # stock_picking_id = fields.Many2one(
+    #     comodel_name='stock.picking',
+    #     readonly=True,
+    #     string='Stock picking',
+    # )
 
     @api.depends('product_ids')
     def _requested_products_qty(self):
@@ -152,71 +144,72 @@ class WarehouseReq(models.Model):
     def action_approve(self):
         if self.env.uid != SUPERUSER_ID and self.env.uid == self.claimant_id.id:
             raise exceptions.ValidationError(_('You can not approve your own requirements'))
-
-        for p in self.product_ids:
-            if p.product_id.seller_ids[0]:
-                partner_id = p.product_id.seller_ids[0].name.id
-                break
-        else:
-            raise exceptions.ValidationError(_('No product has supplier'))
-
-        picking_type_id = self.env['stock.picking.type'].browse(9)  # FIXME magic numbers?
-        stock_picking_dict = {
-            'location_id': self.warehouse_id.lot_stock_id.id,
-            'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
-            'min_date': self.date_required,
-            'origin': self.name,
-            'partner_id': partner_id,
-            'picking_type_id': picking_type_id.id,
-        }
-        self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
-        for p in self.product_ids:
-            stock_move_dict = {
-                'location_id': self.warehouse_id.lot_stock_id.id,
-                'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
-                'name': p.product_id.name,
-                'origin': self.name,
-                'picking_id': self.stock_picking_id.id,
-                'price_unit': p.product_id.list_price,
-                'product_id': p.product_id.id,
-                'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
-                'product_uom_qty': p.requested_qty,
-            }
-            self.env['stock.move'].create(stock_move_dict)
-        self.stock_picking_id.action_confirm()
-        self.stock_picking_id.action_assign()
-
-        if self.purchase_required:
-            purchase_order_dict = {
-                'date_planned': self.date_required,
-                'name': 'New',
-                'partner_id': partner_id,
-                'origin': self.name,
-            }
-            self.purchase_order_id = self.env['purchase.order'].create(purchase_order_dict)
-
-            for p in self.product_ids:
-                if self.purchase_required:
-                    if p.on_hand < p.requested_qty:
-                        p.ordered_qty = p.requested_qty - p.on_hand
-                        purchase_order_line_dict = {
-                            'date_planned': self.date_required,
-                            'name': p.product_id.name,
-                            'order_id': self.purchase_order_id.id,
-                            'price_unit': p.product_id.list_price,
-                            'product_id': p.product_id.id,
-                            'product_qty': p.ordered_qty,
-                            'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
-                        }
-                        self.env['purchase.order.line'].create(purchase_order_line_dict)
         self.state = 'approved'
 
     @api.multi
+    def generate_purchase_orders(self):
+        suppliers = {}
+        # self.product_ids.sort(key=lambda p: (p.product_id.seller_ids[0] and p.product_id.seller_ids[0].name) or '')
+        for p in self.product_ids:
+            if p.product_id.seller_ids[0]:
+                suppliers[p.product_id.seller_ids[0].name.id] = ''
+            else:
+                raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
+            if p.on_hand + p.ordered_qty < p.requested_qty:
+                raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
+        for k, v in suppliers.iteritems():
+            purchase_order_dict = {
+                'date_planned': self.date_required,
+                'name': 'New',
+                'partner_id': k,
+                'origin': self.name,
+            }
+            suppliers[k] = self.env['purchase.order'].create(purchase_order_dict)
+        for p in self.product_ids:
+            purchase_order_line_dict = {
+                'date_planned': self.date_required,
+                'name': p.product_id.name,
+                'order_id': suppliers[p.product_id.seller_ids[0].name.id].id,
+                'price_unit': p.product_id.list_price,
+                'product_id': p.product_id.id,
+                'product_qty': p.ordered_qty,
+                'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
+            }
+            p.purchase_order_id = suppliers[p.product_id.seller_ids[0].name.id].id
+            self.env['purchase.order.line'].create(purchase_order_line_dict)
+        self.ordered = True
+
+    @api.multi
+    def generate_stock_picks(self):
+        # TODO
+        pass
+        # picking_type_id = self.env['stock.picking.type'].browse(9)  # FIXME magic numbers?
+        # stock_picking_dict = {
+        #     'location_id': self.warehouse_id.lot_stock_id.id,
+        #     'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
+        #     'min_date': self.date_required,
+        #     'origin': self.name,
+        #     'partner_id': partner_id,
+        #     'picking_type_id': picking_type_id.id,
+        # }
+        # self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
+        # for p in self.product_ids:
+        #     stock_move_dict = {
+        #         'location_id': self.warehouse_id.lot_stock_id.id,
+        #         'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
+        #         'name': p.product_id.name,
+        #         'origin': self.name,
+        #         'picking_id': self.stock_picking_id.id,
+        #         'price_unit': p.product_id.list_price,
+        #         'product_id': p.product_id.id,
+        #         'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
+        #         'product_uom_qty': p.requested_qty,
+        #     }
+        #     self.env['stock.move'].create(stock_move_dict)
+
+    @api.multi
     def action_done(self):
-        if self.stock_picking_id.state != 'done':
-            raise exceptions.ValidationError(_('Stock picking not done'))
-        else:
-            self.state = 'done'
+        self.state = 'done'
 
     @api.model
     def create(self, vals):

@@ -33,7 +33,6 @@ class WarehouseReqProduct(models.Model):
         string=_('Requested Qty'),
     )
     ordered_qty = fields.Float(
-        readonly=True,
         string=_('Ordered Qty'),
     )
     supplied_qty = fields.Float(  # IDEA bilateral
@@ -46,14 +45,19 @@ class WarehouseReqProduct(models.Model):
         comodel_name='res.partner',
         domain="[('supplier', '=', True)]",
     )
+    purchase_order_id = fields.Many2one(
+        comodel_name='purchase.order',
+        string='Purchase order',
+    )
 
     @api.depends('product_id')
     def _on_hand(self):
         for r in self:
             r.on_hand = r.product_id.qty_available
 
-    @api.depends('product_id', 'warehouse_req_id.stock_picking_id')
+    @api.depends('product_id')
     def _supplied_qty(self):
         for r in self:
-            operations = r.warehouse_req_id.stock_picking_id.pack_operation_product_ids
-            r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
+            r.supplied_qty = 0
+            # operations = r.warehouse_req_id.stock_picking_id.pack_operation_product_ids
+            # r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)

@@ -6,6 +6,8 @@
             <field name="model">warehouse.req</field>
             <field name="arch" type="xml">
                 <form string="Requirement Form">
+                    <field name="ordered" invisible="True"/>
+                    <field name="picked" invisible="True"/>
                     <header>
                         <button name="require" type="workflow"
                                 string="Require" states="draft"
@@ -14,6 +16,16 @@
                                 string="Approve" states="required"
                                 class="oe_highlight"
                                 groups="warehouse_req.approver"/>
+                        <button name="generate_purchase_orders" type="object"
+                                string="Generate PO's"
+                                states="approved"
+                                attrs="{'invisible':[('ordered', '=', True)]}"
+                                class="oe_highlight"/>
+                        <!-- TODO State -->
+                        <button name="generate_stock_picks" type="object"
+                                string="Generate SP's"
+                                attrs="{'invisible':[('picked', '=', True)]}"
+                                class="oe_highlight"/>
                         <button name="done" type="workflow"
                                 string="Done" states="approved"
                                 class="oe_highlight"/>
@@ -33,16 +45,13 @@
                                 <field name="date_requested"/>
                                 <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="stock_picking_id"/>
                             </group>
                             <group>
-                                <field name="purchase_required"/>
                                 <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                                 <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="purchase_order_id"/>
                             </group>
                         </group>
                         <notebook>
@@ -58,6 +67,7 @@
                                         <field name="ordered_qty"/>
                                         <field name="supplied_qty"/>
                                         <field name="suggested_supplier"/>
+                                        <field name="purchase_order_id"/>
                                     </tree>
                                 </field>
                             </page>
