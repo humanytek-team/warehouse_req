@@ -13,10 +13,9 @@ class WarehouseReq(models.Model):
         readonly=True,
         required=True,
     )
-    warehouse_id = fields.Many2one(
-        comodel_name='stock.warehouse',
-        required=True,
-        string=_('Warehouse'),
+    dest_location_id = fields.Many2one(
+        comodel_name='stock.location',
+        string=_('Location Dest'),
     )
     date_requested = fields.Date(
         default=fields.Date.today,
@@ -92,36 +91,21 @@ class WarehouseReq(models.Model):
         store=False,
         string=_('# Items'),
     )
-    supplied_products_qty = fields.Float(  # TODO use the stock_picking_id status instead
-        compute='_supplied_products_qty',
-        store=False,
-    )
     ordered = fields.Boolean(
         default=False
     )
     picked = fields.Boolean(
         default=False
     )
-    # purchase_order_id = fields.Many2one(
-    #     comodel_name='purchase.order',
-    #     readonly=True,
-    #     string='Purchase order',
-    # )
-    # stock_picking_id = fields.Many2one(
-    #     comodel_name='stock.picking',
-    #     readonly=True,
-    #     string='Stock picking',
-    # )
+    stock_picking_type_id = fields.Many2one(
+        comodel_name='stock.picking.type',
+        string=_('Picking type'),
+    )
 
     @api.depends('product_ids')
     def _requested_products_qty(self):
         for r in self:
             r.requested_products_qty = sum(p.requested_qty for p in r.product_ids)
-
-    @api.depends('product_ids')
-    def _supplied_products_qty(self):
-        for r in self:
-            r.supplied_products_qty = sum(p.supplied_qty for p in r.product_ids)
 
     @api.constrains('date_required')
     def _check_date_required_ge_date_requested(self):

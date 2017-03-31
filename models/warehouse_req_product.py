@@ -49,6 +49,10 @@ class WarehouseReqProduct(models.Model):
         comodel_name='purchase.order',
         string='Purchase order',
     )
+    src_location_id = fields.Many2one(
+        comodel_name='stock.location',
+        string=_('Src location'),
+    )
 
     @api.depends('product_id')
     def _on_hand(self):
