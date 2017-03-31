@@ -16,70 +16,67 @@
                                 string="Approve" states="required"
                                 class="oe_highlight"
                                 groups="warehouse_req.approver"/>
-                        <!-- TODO IMP sec -->
                         <button name="generate_purchase_orders" type="object"
                                 string="Generate PO's"
-                                attrs="{'invisible':[('ordered', '=', True)]}"
-                                class="oe_highlight"/>
-                        <!-- TODO State -->
-                        <!-- TODO IMP sec -->
+                                attrs="{'invisible':['|', ('ordered', '=', True), ('state', 'not in', 'approved')]}"
+                                class="oe_highlight"
+                                groups="warehouse_req.admin"/>
                         <button name="generate_stock_picks" type="object"
                                 string="Generate SP's"
-                                attrs="{'invisible':[('picked', '=', True)]}"
-                                class="oe_highlight"/>
-                        <!-- TODO IMP sec -->
+                                attrs="{'invisible':['|', ('picked', '=', True), ('state', 'not in', 'approved')]}"
+                                class="oe_highlight"
+                                groups="warehouse_req.admin"/>
                         <button name="done" type="workflow"
                                 string="Done"
-                                states="approved"
-                                attrs="{'invisible':[('picked', '=', False)]}"
-                                class="oe_highlight"/>
+                                attrs="{'invisible':['|', ('picked', '=', False), ('state', 'not in', 'approved')]}"
+                                class="oe_highlight"
+                                groups="warehouse_req.admin"/>
                         <field name="state" widget="statusbar"/>
                     </header>
-                    <!-- TODO <sheet> -->
-                        <div class="oe_title">
-                            <h1>
-                                <field name="name"/>
-                            </h1>
-                        </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
                         <group>
-                            <group>
-                                <field name="claimant_id"/>
-                                <field name="dest_location_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
-                                <field name="stock_picking_type_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
-                                <field name="date_requested"/>
-                                <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            </group>
-                            <group>
-                                <field name="reason" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                                <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            </group>
+                            <field name="claimant_id"/>
+                            <field name="dest_location_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
+                            <field name="picking_type_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
+                            <field name="date_requested"/>
+                            <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                            <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                         </group>
-                        <notebook>
-                            <page string="Products">
-                                <!-- TODO security -->
-                                <field name="product_ids" mode="tree">
-                                    <tree string="Requirement Order Lines" editable="bottom">
-                                        <field name="sequence" widget="handle"/>
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="specs"/>
-                                        <field name="on_hand"/>
-                                        <field name="requested_qty"/>
-                                        <field name="ordered_qty"/>
-                                        <field name="supplied_qty"/>
-                                        <field name="suggested_supplier"/>
-                                        <field name="src_location_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
-                                        <field name="purchase_order_id"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
-                    <!-- TODO </sheet> -->
+                        <group>
+                            <field name="reason" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                            <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                            <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                            <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                            <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                            <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products">
+                            <field name="product_ids" mode="tree">
+                                <tree string="Requirement Order Lines" editable="bottom">
+                                    <field name="state" invisible="True"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="specs"/>
+                                    <field name="on_hand"/>
+                                    <field name="requested_qty"/>
+                                    <field name="ordered_qty"/>
+                                    <field name="supplied_qty"/>
+                                    <field name="suggested_supplier"/>
+                                    <field name="src_location_id" attrs="{'required':[('state', 'in', 'approved')]}"/>
+                                    <field name="stock_picking_id"/>
+                                    <field name="purchase_order_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </form>
             </field>
         </record>
@@ -99,6 +96,18 @@
                     <field name="reference_folio"/>
                     <field name="requested_products_qty"/>
                 </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="warehouse_req_security_admin">
+            <field name="name">warehouse.req.security.admin</field>
+            <field name="model">warehouse.req</field>
+            <field name="inherit_id" ref="warehouse_req_form_view"/>
+            <field name="groups_id" eval="[(6,0, [ref('warehouse_req.admin')])]"/>
+            <field name="arch" type="xml">
+                <button name="approve" position="after">
+                </button>
             </field>
         </record>
 

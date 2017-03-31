@@ -35,7 +35,7 @@ class WarehouseReqProduct(models.Model):
     ordered_qty = fields.Float(
         string=_('Ordered Qty'),
     )
-    supplied_qty = fields.Float(  # IDEA bilateral
+    supplied_qty = fields.Float(
         compute='_supplied_qty',
         readonly=True,
         store=False,
@@ -47,11 +47,21 @@ class WarehouseReqProduct(models.Model):
     )
     purchase_order_id = fields.Many2one(
         comodel_name='purchase.order',
+        readonly=True,
         string='Purchase order',
     )
     src_location_id = fields.Many2one(
         comodel_name='stock.location',
         string=_('Src location'),
+    )
+    stock_picking_id = fields.Many2one(
+        comodel_name='stock.picking',
+        readonly=True,
+        string=_('Stock picking'),
+    )
+    state = fields.Selection(
+        related='warehouse_req_id.state',
+        store=False,
     )
 
     @api.depends('product_id')
@@ -59,9 +69,8 @@ class WarehouseReqProduct(models.Model):
         for r in self:
             r.on_hand = r.product_id.qty_available
 
-    @api.depends('product_id')
+    @api.depends('stock_picking_id')
     def _supplied_qty(self):
         for r in self:
-            r.supplied_qty = 0
-            # operations = r.warehouse_req_id.stock_picking_id.pack_operation_product_ids
-            # r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
+            operations = r.stock_picking_id.pack_operation_product_ids
+            r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)

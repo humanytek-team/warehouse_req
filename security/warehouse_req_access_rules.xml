@@ -4,7 +4,10 @@
         <record model="res.groups" id="approver">
             <field name="name">Warehouse Requirements / Approver</field>
         </record>
-        
+        <record model="res.groups" id="admin">
+            <field name="name">Warehouse Requirements / Admin</field>
+        </record>
+
         <record model="ir.rule" id="only_claimant_can_modify" >
             <field name="name">Only claimant can modify Requirement</field>
             <field name="model_id" ref="model_warehouse_req"/>

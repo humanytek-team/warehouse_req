@@ -97,7 +97,7 @@ class WarehouseReq(models.Model):
     picked = fields.Boolean(
         default=False
     )
-    stock_picking_type_id = fields.Many2one(
+    picking_type_id = fields.Many2one(
         comodel_name='stock.picking.type',
         string=_('Picking type'),
     )
@@ -133,7 +133,6 @@ class WarehouseReq(models.Model):
     @api.multi
     def generate_purchase_orders(self):
         suppliers = {}
-        # self.product_ids.sort(key=lambda p: (p.product_id.seller_ids[0] and p.product_id.seller_ids[0].name) or '')
         for p in self.product_ids:
             if p.product_id.seller_ids[0]:
                 suppliers[p.product_id.seller_ids[0].name.id] = ''
@@ -141,6 +140,8 @@ class WarehouseReq(models.Model):
                 raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
             if p.on_hand + p.ordered_qty < p.requested_qty:
                 raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
+            if p.ordered_qty <= 0:
+                raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(p.product_id.name))
         for k, v in suppliers.iteritems():
             purchase_order_dict = {
                 'date_planned': self.date_required,
@@ -165,34 +166,40 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def generate_stock_picks(self):
-        # TODO
-        pass
-        # picking_type_id = self.env['stock.picking.type'].browse(9)  # FIXME magic numbers?
-        # stock_picking_dict = {
-        #     'location_id': self.warehouse_id.lot_stock_id.id,
-        #     'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
-        #     'min_date': self.date_required,
-        #     'origin': self.name,
-        #     'partner_id': partner_id,
-        #     'picking_type_id': picking_type_id.id,
-        # }
-        # self.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
-        # for p in self.product_ids:
-        #     stock_move_dict = {
-        #         'location_id': self.warehouse_id.lot_stock_id.id,
-        #         'location_dest_id': self.env['stock.warehouse']._get_partner_locations()[0].id,
-        #         'name': p.product_id.name,
-        #         'origin': self.name,
-        #         'picking_id': self.stock_picking_id.id,
-        #         'price_unit': p.product_id.list_price,
-        #         'product_id': p.product_id.id,
-        #         'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
-        #         'product_uom_qty': p.requested_qty,
-        #     }
-        #     self.env['stock.move'].create(stock_move_dict)
+        for p in self.product_ids:
+            if not p.product_id.seller_ids[0]:
+                raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
+        for p in self.product_ids:
+            stock_picking_dict = {
+                'location_id': p.src_location_id.id,
+                'location_dest_id': self.dest_location_id.id,
+                'min_date': self.date_required,
+                'origin': self.name,
+                'partner_id': p.product_id.seller_ids[0].name.id,
+                'picking_type_id': self.picking_type_id.id,
+            }
+            p.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
+            stock_move_dict = {
+                'location_id': p.src_location_id.id,
+                'location_dest_id': self.dest_location_id.id,
+                'name': p.product_id.name,
+                'origin': self.name,
+                'picking_id': p.stock_picking_id.id,
+                'price_unit': p.product_id.list_price,
+                'product_id': p.product_id.id,
+                'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
+                'product_uom_qty': p.requested_qty,
+            }
+            self.env['stock.move'].create(stock_move_dict)
+        self.picked = True
 
     @api.multi
     def action_done(self):
+        for p in self.product_ids:
+            if not p.stock_picking_id:
+                raise exceptions.ValidationError(_('The product {} has no SP').format(p.product_id.name))
+            elif p.stock_picking_id.state != 'done':
+                raise exceptions.ValidationError(_('The SP {} is not done').format(p.stock_picking_id.name))
         self.state = 'done'
 
     @api.model
