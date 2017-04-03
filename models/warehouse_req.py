@@ -125,6 +125,9 @@ class WarehouseReq(models.Model):
     @api.multi
     def action_require(self):
         if len(self.product_ids) > 0:
+            for p in self.product_ids:
+                if p.requested_qty <= 0:
+                    raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(p.product_id.name))
             self.state = 'required'
         else:
             self.state = 'draft'
@@ -178,7 +181,7 @@ class WarehouseReq(models.Model):
     @api.multi
     def generate_stock_picks(self):
         for p in self.product_ids:
-            if not p.product_id.seller_ids[0]:
+            if not (p.product_id.seller_ids and p.product_id.seller_ids[0]):
                 raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
         for p in self.product_ids:
             stock_picking_dict = {
