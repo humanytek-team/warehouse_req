@@ -63,6 +63,10 @@ class WarehouseReqProduct(models.Model):
         related='warehouse_req_id.state',
         store=False,
     )
+    picked = fields.Boolean(
+        related='warehouse_req_id.picked',
+        store=False,
+    )
 
     @api.depends('product_id')
     def _on_hand(self):

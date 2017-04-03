@@ -40,14 +40,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="claimant_id"/>
-                            <field name="dest_location_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
-                            <field name="picking_type_id" attrs="{'readonly':[('state', '=', 'done')], 'required':[('state', '=', 'approved')]}"/>
-                            <field name="date_requested"/>
                             <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                             <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                        </group>
-                        <group>
                             <field name="reason" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                             <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                             <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
@@ -55,22 +49,30 @@
                             <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                             <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
                         </group>
+                        <group>
+                            <field name="claimant_id"/>
+                            <field name="approver_id"/>
+                            <field name="date_requested"/>
+                            <field name="dest_location_id" attrs="{'readonly':[('state', '!=', 'approved')], 'required':[('state', '=', 'approved')]}"/>
+                            <field name="picking_type_id" attrs="{'readonly':[('state', '!=', 'approved')], 'required':[('state', '=', 'approved')]}"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Products">
                             <field name="product_ids" mode="tree">
                                 <tree string="Requirement Order Lines" editable="bottom">
                                     <field name="state" invisible="True"/>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="product_id"/>
+                                    <field name="picked" invisible="True"/>
+                                    <field name="sequence" widget="handle" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                    <field name="product_id" attrs="{'readonly':[('state', '=', 'done')]}"/>
                                     <field name="name"/>
-                                    <field name="specs"/>
+                                    <field name="specs" attrs="{'readonly':[('state', '=', 'done')]}"/>
                                     <field name="on_hand"/>
-                                    <field name="requested_qty"/>
-                                    <field name="ordered_qty"/>
+                                    <field name="requested_qty" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                    <field name="ordered_qty" attrs="{'readonly':['|', ('state', '!=', 'approved'), ('picked', '=', True)]}"/>
                                     <field name="supplied_qty"/>
-                                    <field name="suggested_supplier"/>
-                                    <field name="src_location_id" attrs="{'required':[('state', 'in', 'approved')]}"/>
+                                    <field name="suggested_supplier" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                    <field name="src_location_id" attrs="{'required':[('state', '=', 'approved')], 'readonly':[('state', '!=', 'approved')]}"/>
                                     <field name="stock_picking_id"/>
                                     <field name="purchase_order_id"/>
                                 </tree>

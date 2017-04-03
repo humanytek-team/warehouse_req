@@ -59,6 +59,11 @@ class WarehouseReq(models.Model):
         required=True,
         string=_('Claimant'),
     )
+    approver_id = fields.Many2one(
+        comodel_name='res.users',
+        readonly=True,
+        string=_('Approver'),
+    )
     state = fields.Selection(
         selection=[
             ('draft', _('Draft')),
@@ -122,25 +127,29 @@ class WarehouseReq(models.Model):
         if len(self.product_ids) > 0:
             self.state = 'required'
         else:
+            self.state = 'draft'
             raise exceptions.ValidationError(_('Product lines needed'))
 
     @api.multi
     def action_approve(self):
         if self.env.uid != SUPERUSER_ID and self.env.uid == self.claimant_id.id:
             raise exceptions.ValidationError(_('You can not approve your own requirements'))
+        self.approver_id = lambda self: self.env.uid
         self.state = 'approved'
 
     @api.multi
     def generate_purchase_orders(self):
         suppliers = {}
         for p in self.product_ids:
+            if p.ordered_qty == 0:
+                continue
             if p.product_id.seller_ids[0]:
                 suppliers[p.product_id.seller_ids[0].name.id] = ''
             else:
                 raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
             if p.on_hand + p.ordered_qty < p.requested_qty:
                 raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
-            if p.ordered_qty <= 0:
+            if p.ordered_qty < 0:
                 raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(p.product_id.name))
         for k, v in suppliers.iteritems():
             purchase_order_dict = {
@@ -151,6 +160,8 @@ class WarehouseReq(models.Model):
             }
             suppliers[k] = self.env['purchase.order'].create(purchase_order_dict)
         for p in self.product_ids:
+            if p.ordered_qty == 0:
+                continue
             purchase_order_line_dict = {
                 'date_planned': self.date_required,
                 'name': p.product_id.name,

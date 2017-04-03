@@ -127,12 +127,12 @@ msgstr "Folio"
 #. module: warehouse_req
 #: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_security_admin
 msgid "Generate PO's"
-msgstr "Generate PO's"
+msgstr "Generar ordenes de Compra"
 
 #. module: warehouse_req
 #: model:ir.ui.view,arch_db:warehouse_req.warehouse_req_security_admin
 msgid "Generate SP's"
-msgstr "Generate SP's"
+msgstr "Generar movimientos de almacén"
 
 #. module: warehouse_req
 #: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_id
@@ -191,14 +191,14 @@ msgstr "Préstamo"
 #: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_dest_location_id
 #, python-format
 msgid "Location Dest"
-msgstr "Location Dest"
+msgstr "Ubicación de destino"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req.py:39
 #: selection:warehouse.req,reason:0
 #, python-format
 msgid "Minimal Suppliers"
-msgstr "Minimal Suppliers"
+msgstr "Abastecimientos minimos"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req.py:10
@@ -221,7 +221,7 @@ msgstr "Existencia"
 #. module: warehouse_req
 #: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_ordered
 msgid "Ordered"
-msgstr "Ordered"
+msgstr "Ordenado"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req_product.py:36
@@ -254,7 +254,7 @@ msgstr "Picked"
 #: model:ir.model.fields,field_description:warehouse_req.field_warehouse_req_picking_type_id
 #, python-format
 msgid "Picking type"
-msgstr "Picking type"
+msgstr "Tipo de albarán"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req_product.py:23
@@ -482,12 +482,12 @@ msgstr "El producto {} no tiene proveedor"
 #. module: warehouse_req
 #: model:res.groups,name:warehouse_req.admin
 msgid "Warehouse Requirements / Admin"
-msgstr "Requerimientos de alamacén / Administrador"
+msgstr "Requerimientos de almacén / Administrador"
 
 #. module: warehouse_req
 #: model:res.groups,name:warehouse_req.approver
 msgid "Warehouse Requirements / Approver"
-msgstr "Requerimientos de alamacén / Autorizador"
+msgstr "Requerimientos de almacén / Autorizador"
 
 #. module: warehouse_req
 #: code:addons/warehouse_req/models/warehouse_req.py:33
