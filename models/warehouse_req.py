@@ -18,7 +18,7 @@ class WarehouseReq(models.Model):
         string=_('Location Dest'),
     )
     date_requested = fields.Date(
-        default=fields.Date.today,
+        default=fields.Date.context_today,
         readonly=True,
         string=_('Date of Request'),
     )
