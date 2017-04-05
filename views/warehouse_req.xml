@@ -65,7 +65,6 @@
                                     <field name="picked" invisible="True"/>
                                     <field name="sequence" widget="handle" attrs="{'readonly':[('state', '=', 'done')]}"/>
                                     <field name="product_id" attrs="{'readonly':[('state', '=', 'done')]}"/>
-                                    <field name="name"/>
                                     <field name="specs" attrs="{'readonly':[('state', '=', 'done')]}"/>
                                     <field name="on_hand"/>
                                     <field name="requested_qty" attrs="{'readonly':[('state', '=', 'done')]}"/>
