@@ -1,4 +1,5 @@
 from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class WarehouseReqProduct(models.Model):
@@ -72,3 +73,9 @@ class WarehouseReqProduct(models.Model):
         for r in self:
             operations = r.stock_picking_id.pack_operation_product_ids
             r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
+
+    @api.constrains('requested_qty')
+    def _check_requested_qty_gt_0(self):
+            for r in self:
+                if r.requested_qty <= 0:
+                    raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(r.product_id.name))

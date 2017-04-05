@@ -1,4 +1,4 @@
-from odoo import api, exceptions, fields, models, _, SUPERUSER_ID
+from odoo import api, fields, models, _, SUPERUSER_ID
 from odoo.exceptions import ValidationError
 
 
@@ -124,14 +124,13 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_require(self):
-        if len(self.product_ids) > 0:
-            for p in self.product_ids:
-                if p.requested_qty <= 0:
-                    raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(p.product_id.name))
-            self.state = 'required'
-        else:
-            self.state = 'draft'
-            raise exceptions.ValidationError(_('Product lines needed'))
+        self.state = 'required'
+
+    @api.constrains('product_ids')
+    def _check_product_ids_len_ne_0(self):
+        for r in self:
+            if len(r.product_ids) == 0:
+                raise exceptions.ValidationError(_('Product lines needed'))
 
     @api.multi
     def action_approve(self):
@@ -150,10 +149,10 @@ class WarehouseReq(models.Model):
                 suppliers[p.product_id.seller_ids[0].name.id] = ''
             else:
                 raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
-            if p.on_hand + p.ordered_qty < p.requested_qty:
-                raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
             if p.ordered_qty < 0:
                 raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(p.product_id.name))
+            if p.on_hand + p.ordered_qty < p.requested_qty:
+                raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
         for k, v in suppliers.iteritems():
             purchase_order_dict = {
                 'date_planned': self.date_required,
