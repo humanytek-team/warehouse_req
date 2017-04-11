@@ -1,5 +1,4 @@
-from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo import api, exceptions, fields, models, _
 
 
 class WarehouseReqProduct(models.Model):
