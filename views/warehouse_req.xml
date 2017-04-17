@@ -12,6 +12,10 @@
                         <button name="require" type="workflow"
                                 string="Require" states="draft"
                                 class="oe_highlight"/>
+                        <!-- BUG sometimes don't have state assigned -->
+                        <button name="require" type="workflow"
+                                string="Require" attrs="{'invisible':[('state', 'in', ['draft', 'required', 'approved', 'done'])]}"
+                                class="oe_highlight"/>
                         <button name="approve" type="workflow"
                                 string="Approve" states="required"
                                 class="oe_highlight"
