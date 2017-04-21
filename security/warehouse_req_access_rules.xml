@@ -15,8 +15,29 @@
             <field name="perm_write" eval="1"/>
             <field name="perm_create" eval="0"/>
             <field name="perm_unlink" eval="1"/>
+            <field name="groups" eval="[(4, ref('stock.group_stock_user'))]"/>
             <field name="domain_force">
                 [('claimant_id', '=', user.id)]
+            </field>
+        </record>
+
+        <record model="ir.rule" id="approver_can_write" >
+            <field name="name">Approver can write</field>
+            <field name="model_id" ref="model_warehouse_req"/>
+            <field name="perm_write" eval="1"/>
+            <field name="groups" eval="[(4, ref('warehouse_req.approver'))]"/>
+            <field name="domain_force">
+                [(1, '=', 1)]
+            </field>
+        </record>
+
+        <record model="ir.rule" id="admin_can_write" >
+            <field name="name">Admin can write</field>
+            <field name="model_id" ref="model_warehouse_req"/>
+            <field name="perm_write" eval="1"/>
+            <field name="groups" eval="[(4, ref('warehouse_req.approver'))]"/>
+            <field name="domain_force">
+                [(1, '=', 1)]
             </field>
         </record>
     </data>
