@@ -48,7 +48,7 @@ class WarehouseReq(models.Model):
             ('bill', _('Bill of Materials')),
         ],
     )
-    reference_folio = fields.Integer(
+    reference_folio = fields.Char(
         string=_('Reference'),
     )
     claimant_id = fields.Many2one(
