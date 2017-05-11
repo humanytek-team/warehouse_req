@@ -18,7 +18,7 @@ class WarehouseReqProduct(models.Model):
     )
     specs = fields.Char()
     on_hand = fields.Float(
-        compute="_on_hand",
+        compute='_on_hand',
         readonly=True,
         store=False,
     )
@@ -60,6 +60,11 @@ class WarehouseReqProduct(models.Model):
     picked = fields.Boolean(
         related='warehouse_req_id.picked',
         store=False,
+    )
+    account_analytic_id = fields.Many2one(
+        comodel_name='account.analytic.account',
+        required=True,
+        string=_('Account analytic'),
     )
 
     @api.depends('product_id')

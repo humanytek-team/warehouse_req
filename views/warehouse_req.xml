@@ -75,6 +75,7 @@
                                     <field name="ordered_qty" attrs="{'readonly':['|', ('state', '!=', 'approved'), ('picked', '=', True)]}"/>
                                     <field name="supplied_qty"/>
                                     <field name="suggested_supplier" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                                    <field name="account_analytic_id" attrs="{'readonly':[('state', 'not in', '[draft, required]')]}"/>
                                     <field name="src_location_id" attrs="{'required':[('state', '=', 'approved')], 'readonly':[('state', '!=', 'approved')]}"/>
                                     <field name="stock_picking_id"/>
                                     <field name="purchase_order_id"/>
