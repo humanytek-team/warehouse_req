@@ -163,6 +163,7 @@ class WarehouseReq(models.Model):
                 continue
             purchase_order_line_dict = {
                 'date_planned': self.date_required,
+                'account_analytic_id': p.account_analytic_id and p.account_analytic_id.id or False,
                 'name': p.product_id.name,
                 'order_id': suppliers[p.product_id.seller_ids[0].name.id].id,
                 'price_unit': p.product_id.list_price,
