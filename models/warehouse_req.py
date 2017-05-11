@@ -142,8 +142,6 @@ class WarehouseReq(models.Model):
     def generate_purchase_orders(self):
         suppliers = {}
         for p in self.product_ids:
-            if p.ordered_qty == 0:
-                continue
             if p.product_id.seller_ids[0]:
                 suppliers[p.product_id.seller_ids[0].name.id] = ''
             else:
