@@ -69,6 +69,7 @@ class WarehouseReq(models.Model):
             ('required', _('Required')),
             ('approved', _('Approved')),
             ('done', _('Done')),
+            ('cancel', _('Cancelled')),
         ],
         default='draft',
     )
@@ -212,6 +213,10 @@ class WarehouseReq(models.Model):
             elif p.stock_picking_id.state != 'done':
                 raise exceptions.ValidationError(_('The SP {} is not done').format(p.stock_picking_id.name))
         self.state = 'done'
+
+    @api.multi
+    def action_cancel(self):
+        self.state = 'cancel'
 
     @api.model
     def create(self, vals):

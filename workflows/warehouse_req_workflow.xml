@@ -32,6 +32,12 @@
             <field name="kind">function</field>
             <field name="action">action_done()</field>
         </record>
+        <record model="workflow.activity" id="cancel">
+            <field name="name">Cancel</field>
+            <field name="wkf_id" ref="wkf_warehouse_req"/>
+            <field name="kind">function</field>
+            <field name="action">action_cancel()</field>
+        </record>
 
         <record model="workflow.transition" id="warehouse_req_draft_to_required">
             <field name="act_from" ref="draft"/>
@@ -47,6 +53,11 @@
             <field name="act_from" ref="approved"/>
             <field name="act_to" ref="done"/>
             <field name="signal">done</field>
+        </record>
+        <record model="workflow.transition" id="warehouse_req_required_to_cancel">
+            <field name="act_from" ref="required"/>
+            <field name="act_to" ref="cancel"/>
+            <field name="signal">cancel</field>
         </record>
     </data>
 </odoo>
