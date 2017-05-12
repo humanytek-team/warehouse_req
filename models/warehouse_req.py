@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
 from odoo import api, exceptions, fields, models, _, SUPERUSER_ID
+
+approver_string = u"Requerimientos de almacén / Autorizador / "
+claimant_string = u"Requerimientos de almacén / Solicitante / "
 
 
 class WarehouseReq(models.Model):
@@ -109,6 +113,15 @@ class WarehouseReq(models.Model):
         comodel_name='stock.picking.type',
         string=_('Picking type'),
     )
+
+    @api.multi
+    def check_areas(self):
+        approver_areas = {group.name[len(approver_string):] for group in self.env.user.groups_id if group.name[:len(approver_string)] == approver_string}
+        claimant_areas = {group.name[len(claimant_string):] for group in self.env['res.users'].browse(self.claimant_id.id).groups_id if group.name[:len(claimant_string)] == claimant_string}
+        if len(claimant_areas & approver_areas):
+            self.action_approve()
+        else:
+            raise exceptions.ValidationError(_('Only can approve requirements from your areas'))
 
     @api.depends('product_ids')
     def _requested_products_qty(self):

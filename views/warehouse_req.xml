@@ -16,8 +16,9 @@
                         <button name="require" type="workflow"
                                 string="Require" attrs="{'invisible':[('state', 'in', ['draft', 'required', 'approved', 'partial_supplied', 'done', 'cancel'])]}"
                                 class="oe_highlight"/>
-                        <button name="approve" type="workflow"
-                                string="Approve" states="required"
+                        <button name="check_areas" type="object"
+                                string="Approve"
+                                states="required"
                                 class="oe_highlight"
                                 groups="warehouse_req.approver"/>
                         <button name="cancel" type="workflow"
@@ -104,18 +105,6 @@
                     <field name="reference_folio"/>
                     <field name="requested_products_qty"/>
                 </tree>
-            </field>
-        </record>
-
-
-        <record model="ir.ui.view" id="warehouse_req_security_admin">
-            <field name="name">warehouse.req.security.admin</field>
-            <field name="model">warehouse.req</field>
-            <field name="inherit_id" ref="warehouse_req_form_view"/>
-            <field name="groups_id" eval="[(6,0, [ref('warehouse_req.admin')])]"/>
-            <field name="arch" type="xml">
-                <button name="approve" position="after">
-                </button>
             </field>
         </record>
 
