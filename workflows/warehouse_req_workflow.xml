@@ -26,15 +26,23 @@
             <field name="kind">function</field>
             <field name="action">action_approve()</field>
         </record>
+        <record model="workflow.activity" id="partial_supplied">
+            <field name="name">Partial Supplied</field>
+            <field name="wkf_id" ref="wkf_warehouse_req"/>
+            <field name="kind">function</field>
+            <field name="action">action_partial_supply()</field>
+        </record>
         <record model="workflow.activity" id="done">
             <field name="name">Done</field>
             <field name="wkf_id" ref="wkf_warehouse_req"/>
+            <field name="flow_stop" eval="True"/>
             <field name="kind">function</field>
             <field name="action">action_done()</field>
         </record>
         <record model="workflow.activity" id="cancel">
             <field name="name">Cancel</field>
             <field name="wkf_id" ref="wkf_warehouse_req"/>
+            <field name="flow_stop" eval="True"/>
             <field name="kind">function</field>
             <field name="action">action_cancel()</field>
         </record>
@@ -49,10 +57,15 @@
             <field name="act_to" ref="approved"/>
             <field name="signal">approve</field>
         </record>
-        <record model="workflow.transition" id="warehouse_req_approved_to_done">
+        <record model="workflow.transition" id="warehouse_req_approved_to_partial_supplied">
             <field name="act_from" ref="approved"/>
+            <field name="act_to" ref="partial_supplied"/>
+            <field name="condition">partial_supply</field>
+        </record>
+        <record model="workflow.transition" id="warehouse_req_partial_supplied_to_done">
+            <field name="act_from" ref="partial_supplied"/>
             <field name="act_to" ref="done"/>
-            <field name="signal">done</field>
+            <field name="condition">done</field>
         </record>
         <record model="workflow.transition" id="warehouse_req_required_to_cancel">
             <field name="act_from" ref="required"/>

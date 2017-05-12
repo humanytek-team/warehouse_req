@@ -68,6 +68,7 @@ class WarehouseReq(models.Model):
             ('draft', _('Draft')),
             ('required', _('Required')),
             ('approved', _('Approved')),
+            ('partial_supplied', _('Partial Supplied')),
             ('done', _('Done')),
             ('cancel', _('Cancelled')),
         ],
@@ -93,8 +94,10 @@ class WarehouseReq(models.Model):
     )
     requested_products_qty = fields.Float(
         compute='_requested_products_qty',
-        store=False,
         string=_('# Items'),
+    )
+    supplied_products_qty = fields.Float(
+        compute='_supplied_products_qty',
     )
     ordered = fields.Boolean(
         default=False
@@ -111,6 +114,11 @@ class WarehouseReq(models.Model):
     def _requested_products_qty(self):
         for r in self:
             r.requested_products_qty = sum(p.requested_qty for p in r.product_ids)
+
+    @api.depends('product_ids')
+    def _supplied_products_qty(self):
+        for r in self:
+            r.supplied_products_qty = sum(p.supplied_qty for p in r.product_ids)
 
     @api.constrains('date_required')
     def _check_date_required_ge_date_requested(self):
@@ -138,6 +146,32 @@ class WarehouseReq(models.Model):
             raise exceptions.ValidationError(_('You can not approve your own requirements'))
         self.approver_id = lambda self: self.env.uid
         self.state = 'approved'
+
+    @api.multi
+    def action_check_state(self):
+        if self.state == 'approved' or self.state == 'partial_supplied':
+            if self.supplied_products_qty > 0:
+                if self.supplied_products_qty < self.requested_products_qty:
+                    self.action_partial_supply()
+                else:
+                    self.action_partial_supply()
+
+    @api.multi
+    def action_partial_supply(self):
+        self.state = 'partial_supplied'
+
+    @api.multi
+    def action_done(self):
+        for p in self.product_ids:
+            if not p.stock_picking_id:
+                raise exceptions.ValidationError(_('The product {} has no SP').format(p.product_id.name))
+            elif p.stock_picking_id.state != 'done':
+                raise exceptions.ValidationError(_('The SP {} is not done').format(p.stock_picking_id.name))
+        self.state = 'done'
+
+    @api.multi
+    def action_cancel(self):
+        self.state = 'cancel'
 
     @api.multi
     def generate_purchase_orders(self):
@@ -204,19 +238,6 @@ class WarehouseReq(models.Model):
             }
             self.env['stock.move'].create(stock_move_dict)
         self.picked = True
-
-    @api.multi
-    def action_done(self):
-        for p in self.product_ids:
-            if not p.stock_picking_id:
-                raise exceptions.ValidationError(_('The product {} has no SP').format(p.product_id.name))
-            elif p.stock_picking_id.state != 'done':
-                raise exceptions.ValidationError(_('The SP {} is not done').format(p.stock_picking_id.name))
-        self.state = 'done'
-
-    @api.multi
-    def action_cancel(self):
-        self.state = 'cancel'
 
     @api.model
     def create(self, vals):
