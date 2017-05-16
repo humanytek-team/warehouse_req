@@ -167,7 +167,7 @@ class WarehouseReq(models.Model):
                 if self.supplied_products_qty < self.requested_products_qty:
                     self.action_partial_supply()
                 else:
-                    self.action_partial_supply()
+                    self.action_done()
 
     @api.multi
     def action_partial_supply(self):
