@@ -7,6 +7,7 @@ claimant_string = u"Requerimientos de almacén / Solicitante / "
 
 class WarehouseReq(models.Model):
     _name = 'warehouse.req'
+    _inherit = 'mail.thread'
 
     name = fields.Char(
         copy=False,

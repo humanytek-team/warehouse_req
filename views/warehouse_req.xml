@@ -1,124 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
-        <record model="ir.ui.view" id="warehouse_req_form_view">
-            <field name="name">warehouse.req.form</field>
-            <field name="model">warehouse.req</field>
-            <field name="arch" type="xml">
-                <form string="Requirement Form">
-                    <field name="ordered" invisible="True"/>
-                    <field name="picked" invisible="True"/>
-                    <header>
-                        <button name="require" type="workflow"
-                                string="Require" states="draft"
-                                class="oe_highlight"/>
-                        <!-- BUG sometimes don't have state assigned -->
-                        <button name="require" type="workflow"
-                                string="Require" attrs="{'invisible':[('state', 'in', ['draft', 'required', 'approved', 'partial_supplied', 'done', 'cancel'])]}"
-                                class="oe_highlight"/>
-                        <button name="check_areas" type="object"
-                                string="Approve"
-                                states="required"
-                                class="oe_highlight"
-                                groups="warehouse_req.approver"/>
-                        <button name="cancel" type="workflow"
-                                string="Cancel" states="required"/>
-                        <button name="generate_purchase_orders" type="object"
-                                string="Generate PO's"
-                                attrs="{'invisible':['|', ('ordered', '=', True), ('state', 'not in', 'approved')]}"
-                                class="oe_highlight"
-                                groups="warehouse_req.admin"/>
-                        <button name="generate_stock_picks" type="object"
-                                string="Generate SP's"
-                                attrs="{'invisible':['|', ('picked', '=', True), ('state', 'not in', 'approved')]}"
-                                class="oe_highlight"
-                                groups="warehouse_req.admin"/>
-                        <button name="action_check_state" type="object"
-                                string="Check status"
-                                states="approved,partial_supplied"
-                                class="oe_highlight"
-                                groups="warehouse_req.admin"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,required,approved,partial_supplied,done"/>
-                    </header>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name"/>
-                        </h1>
-                    </div>
-                    <group>
-                        <group>
-                            <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="reason" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                            <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
-                        </group>
-                        <group>
-                            <field name="claimant_id"/>
-                            <field name="approver_id"/>
-                            <field name="date_requested"/>
-                            <field name="dest_location_id" attrs="{'readonly':[('state', '!=', 'approved')], 'required':[('state', '=', 'approved')]}"/>
-                            <field name="picking_type_id" attrs="{'readonly':[('state', '!=', 'approved')], 'required':[('state', '=', 'approved')]}"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Products">
-                            <field name="product_ids" mode="tree">
-                                <tree string="Requirement Order Lines" editable="bottom">
-                                    <field name="state" invisible="True"/>
-                                    <field name="picked" invisible="True"/>
-                                    <field name="sequence" widget="handle" attrs="{'readonly':[('state', '=', 'done')]}"/>
-                                    <field name="product_id" attrs="{'readonly':[('state', '=', 'done')]}"/>
-                                    <field name="specs" attrs="{'readonly':[('state', '=', 'done')]}"/>
-                                    <field name="on_hand"/>
-                                    <field name="requested_qty" attrs="{'readonly':[('state', '=', 'done')]}"/>
-                                    <field name="ordered_qty" attrs="{'readonly':['|', ('state', '!=', 'approved'), ('picked', '=', True)]}"/>
-                                    <field name="supplied_qty"/>
-                                    <field name="suggested_supplier" attrs="{'readonly':[('state', '=', 'done')]}"/>
-                                    <field name="account_analytic_id" attrs="{'readonly':[('state', 'in', ['approved', 'done'])]}"/>
-                                    <field name="src_location_id" attrs="{'required':[('state', '=', 'approved')], 'readonly':[('state', '!=', 'approved')]}"/>
-                                    <field name="stock_picking_id"/>
-                                    <field name="purchase_order_id"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </form>
-            </field>
-        </record>
-
-        <record model="ir.ui.view" id="warehouse_req_tree_view">
-            <field name="name">warehouse.req.form</field>
-            <field name="model">warehouse.req</field>
-            <field name="arch" type="xml">
-                <tree string="Requeriments Tree">
-                    <field name="claimant_id"/>
-                    <field name="dest_location_id"/>
-                    <field name="name"/>
-                    <field name="date_requested"/>
-                    <field name="date_required"/>
-                    <field name="state"/>
-                    <field name="reason"/>
-                    <field name="reference_folio"/>
-                    <field name="requested_products_qty"/>
+  <data>
+    <record model="ir.ui.view" id="warehouse_req_form_view">
+      <field name="name">warehouse.req.form</field>
+      <field name="model">warehouse.req</field>
+      <field name="arch" type="xml">
+        <form string="Requirement Form">
+          <field name="ordered" invisible="True"/>
+          <field name="picked" invisible="True"/>
+          <header>
+            <button name="require" type="workflow"
+                string="Require" states="draft"
+                class="oe_highlight"/>
+            <!-- BUG sometimes don't have state assigned -->
+            <button name="require" type="workflow"
+                string="Require" attrs="{'invisible':[('state', 'in', ['draft', 'required', 'approved', 'partial_supplied', 'done', 'cancel'])]}"
+                class="oe_highlight"/>
+            <button name="check_areas" type="object"
+                string="Approve"
+                states="required"
+                class="oe_highlight"
+                groups="warehouse_req.approver"/>
+            <button name="cancel" type="workflow"
+                string="Cancel" states="required"/>
+            <button name="generate_purchase_orders" type="object"
+                string="Generate PO's"
+                attrs="{'invisible':['|', ('ordered', '=', True), ('state', 'not in', 'approved')]}"
+                class="oe_highlight"
+                groups="warehouse_req.admin"/>
+            <button name="generate_stock_picks" type="object"
+                string="Generate SP's"
+                attrs="{'invisible':['|', ('picked', '=', True), ('state', 'not in', 'approved')]}"
+                class="oe_highlight"
+                groups="warehouse_req.admin"/>
+            <button name="action_check_state" type="object"
+                string="Check status"
+                states="approved,partial_supplied"
+                class="oe_highlight"
+                groups="warehouse_req.admin"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,required,approved,partial_supplied,done"/>
+          </header>
+          <div class="oe_title">
+            <h1>
+              <field name="name"/>
+            </h1>
+          </div>
+          <group>
+            <group>
+              <field name="shipping_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="deliver_to" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="reason" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="reference_type" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="reference_folio" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="date_required" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="client_id" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+              <field name="deliver_address" attrs="{'readonly':[('state', 'not in', ['draft', 'required'])]}"/>
+            </group>
+            <group>
+              <field name="claimant_id"/>
+              <field name="approver_id"/>
+              <field name="date_requested"/>
+              <field name="dest_location_id" attrs="{'readonly':[('state', '!=', 'approved')], 'required':[('state', '=', 'approved')]}"/>
+              <field name="picking_type_id" attrs="{'readonly':[('state', '!=', 'approved')], 'required':[('state', '=', 'approved')]}"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Products">
+              <field name="product_ids" mode="tree">
+                <tree string="Requirement Order Lines" editable="bottom">
+                  <field name="state" invisible="True"/>
+                  <field name="picked" invisible="True"/>
+                  <field name="sequence" widget="handle" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                  <field name="product_id" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                  <field name="specs" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                  <field name="on_hand"/>
+                  <field name="requested_qty" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                  <field name="ordered_qty" attrs="{'readonly':['|', ('state', '!=', 'approved'), ('picked', '=', True)]}"/>
+                  <field name="supplied_qty"/>
+                  <field name="suggested_supplier" attrs="{'readonly':[('state', '=', 'done')]}"/>
+                  <field name="account_analytic_id" attrs="{'readonly':[('state', 'in', ['approved', 'done'])]}"/>
+                  <field name="src_location_id" attrs="{'required':[('state', '=', 'approved')], 'readonly':[('state', '!=', 'approved')]}"/>
+                  <field name="stock_picking_id"/>
+                  <field name="purchase_order_id"/>
                 </tree>
-            </field>
-        </record>
+              </field>
+            </page>
+          </notebook>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
 
-        <record model="ir.actions.act_window" id="warehouse_req_list_action">
-            <field name="name">Requirements</field>
-            <field name="res_model">warehouse.req</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
+    <record model="ir.ui.view" id="warehouse_req_tree_view">
+      <field name="name">warehouse.req.form</field>
+      <field name="model">warehouse.req</field>
+      <field name="arch" type="xml">
+        <tree string="Requeriments Tree">
+          <field name="claimant_id"/>
+          <field name="dest_location_id"/>
+          <field name="name"/>
+          <field name="date_requested"/>
+          <field name="date_required"/>
+          <field name="state"/>
+          <field name="reason"/>
+          <field name="reference_folio"/>
+          <field name="requested_products_qty"/>
+        </tree>
+      </field>
+    </record>
 
-        <data>
-            <menuitem id="warehouse_req_menu" name="Requirements"
-                      parent="stock.menu_stock_inventory_control"
-                      action="warehouse_req_list_action"/>
-        </data>
+    <record model="ir.actions.act_window" id="warehouse_req_list_action">
+      <field name="name">Requirements</field>
+      <field name="res_model">warehouse.req</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <data>
+      <menuitem id="warehouse_req_menu"
+                name="Requirements"
+                parent="stock.menu_stock_inventory_control"
+                action="warehouse_req_list_action"/>
     </data>
+  </data>
 </odoo>
