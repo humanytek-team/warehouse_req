@@ -190,7 +190,7 @@ class WarehouseReq(models.Model):
     def generate_purchase_orders(self):
         suppliers = {}
         for p in self.product_ids:
-            if p.product_id.seller_ids[0]:
+            if p.product_id.seller_ids and p.product_id.seller_ids[0]:
                 suppliers[p.product_id.seller_ids[0].name.id] = ''
             else:
                 raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
