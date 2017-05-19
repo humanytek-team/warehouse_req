@@ -221,13 +221,14 @@ class WarehouseReq(models.Model):
                 'account_analytic_id': p.account_analytic_id and p.account_analytic_id.id or False,
                 'name': p.product_id.name,
                 'order_id': suppliers[p.product_id.seller_ids[0].name.id].id,
-                'price_unit': p.product_id.list_price,
+                'price_unit': p.product_id.seller_ids[0].price,
                 'product_id': p.product_id.id,
                 'product_qty': p.ordered_qty,
                 'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
             }
             p.purchase_order_id = suppliers[p.product_id.seller_ids[0].name.id].id
-            self.env['purchase.order.line'].create(purchase_order_line_dict)
+            purchase_order_line = self.env['purchase.order.line'].create(purchase_order_line_dict)
+            purchase_order_line.taxes_id = p.product_id.supplier_taxes_id
         self.ordered = True
 
     @api.multi
