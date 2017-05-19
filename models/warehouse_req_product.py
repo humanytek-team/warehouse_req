@@ -75,8 +75,16 @@ class WarehouseReqProduct(models.Model):
     @api.depends('stock_picking_id')
     def _supplied_qty(self):
         for r in self:
-            operations = r.stock_picking_id.pack_operation_product_ids
-            r.supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
+            stock_picking_id = r.stock_picking_id
+            operations = stock_picking_id.pack_operation_product_ids
+            supplied_qty = sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
+            while True:
+                stock_picking_id = stock_picking_id.backorder_id
+                if not stock_picking_id:
+                    break
+                operations = stock_picking_id.pack_operation_product_ids
+                supplied_qty = supplied_qty + sum(operation.qty_done for operation in operations if operation.product_id == r.product_id)
+            r.supplied_qty = supplied_qty
 
     @api.constrains('requested_qty')
     def _check_requested_qty_gt_0(self):

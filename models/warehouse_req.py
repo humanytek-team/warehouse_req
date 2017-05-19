@@ -164,6 +164,12 @@ class WarehouseReq(models.Model):
     @api.multi
     def action_check_state(self):
         if self.state == 'approved' or self.state == 'partial_supplied':
+            for product in self.product_ids:
+                while True:
+                    temp = product.stock_picking_id
+                    product.stock_picking_id = self.env['stock.picking'].search([('backorder_id', '=', product.stock_picking_id.id)]) or product.stock_picking_id
+                    if temp == product.stock_picking_id:
+                        break
             if self.supplied_products_qty > 0:
                 if self.supplied_products_qty < self.requested_products_qty:
                     self.action_partial_supply()
