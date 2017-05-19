@@ -230,6 +230,7 @@ class WarehouseReq(models.Model):
             purchase_order_line = self.env['purchase.order.line'].create(purchase_order_line_dict)
             purchase_order_line.taxes_id = p.product_id.supplier_taxes_id
             p.purchase_order_id.fiscal_position_id = p.product_id.seller_ids[0].name.property_account_position_id.id
+            p.purchase_order_id.currency_id = p.product_id.seller_ids[0].name.property_purchase_currency_id
         self.ordered = True
 
     @api.multi
