@@ -216,6 +216,7 @@ class WarehouseReq(models.Model):
         for p in self.product_ids:
             if p.ordered_qty == 0:
                 continue
+            p.purchase_order_id = suppliers[p.product_id.seller_ids[0].name.id].id
             purchase_order_line_dict = {
                 'date_planned': self.date_required,
                 'account_analytic_id': p.account_analytic_id and p.account_analytic_id.id or False,
@@ -226,9 +227,9 @@ class WarehouseReq(models.Model):
                 'product_qty': p.ordered_qty,
                 'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
             }
-            p.purchase_order_id = suppliers[p.product_id.seller_ids[0].name.id].id
             purchase_order_line = self.env['purchase.order.line'].create(purchase_order_line_dict)
             purchase_order_line.taxes_id = p.product_id.supplier_taxes_id
+            p.purchase_order_id.fiscal_position_id = p.product_id.seller_ids[0].name.property_account_position_id.id
         self.ordered = True
 
     @api.multi
