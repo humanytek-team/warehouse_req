@@ -10,6 +10,7 @@ class WarehouseReqProduct(models.Model):
         index=True,
         required=True,
         string=_('Requirement'),
+        ondelete='cascade',
     )
     product_id = fields.Many2one(
         comodel_name='product.product',

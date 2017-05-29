@@ -284,3 +284,12 @@ class WarehouseReq(models.Model):
             }
             default['product_ids'].append((0, 0, line_dict))
         return super(WarehouseReq, self).copy(default)
+
+    @api.multi
+    def unlink(self):
+        for line in self.product_ids:
+            if line.stock_picking_id:
+                raise exceptions.Warning(_("You are trying to delete lines transfered!"))
+            if line.purchase_order_id:
+                raise exceptions.Warning(_("You are trying to delete lines purchased!"))
+        return super(WarehouseReq, self).unlink()
