@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+    <report id="warehouse_req_report"
+            model="warehouse.req"
+            string="Requirement"
+            name="warehouse_req.warehouse_req_report_template"
+            file="warehouse_req.warehouse_req_report"
+            report_type="qweb-pdf"/>
+
+    <template id="warehouse_req_report_template">
+      <div class="header"/>
+      <div class="footer"/>
+      <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="doc">
+          <t t-call="report.external_layout">
+            <div class="page">
+              <style type="text/css">
+                td {
+                  height: 20;
+                }
+                span {
+                  margin-right: 10px;
+                  margin-left: 10px;
+                }
+              </style>
+              <h2><span t-field="doc.name"/></h2>
+              <h4>Estado: <span t-field="doc.state"/></h4>
+              <br/>
+              <table>
+                <tr>
+                  <td width="50%">
+                    <table>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Tipo de envío</span></td>
+                        <td><span t-field="doc.shipping_type"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Entregar a</span></td>
+                        <td><span t-field="doc.deliver_to"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Motivo</span></td>
+                        <td><span t-field="doc.reason"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Tipo de referencia</span></td>
+                        <td><span t-field="doc.reference_type"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Referencia</span></td>
+                        <td><span t-field="doc.reference_folio"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Fecha requerida</span></td>
+                        <td><span t-field="doc.date_required"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Cliente</span></td>
+                        <td><span t-field="doc.client_id"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Dirección de entrega</span></td>
+                        <td><span t-field="doc.deliver_address"/></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td style="content-align: right;">
+                    <table>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Solicitante</span></td>
+                        <td><span t-field="doc.claimant_id"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Autorizado por</span></td>
+                        <td><span t-field="doc.approver_id"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Fecha de solicitud</span></td>
+                        <td><span t-field="doc.date_requested"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Ubicación de destino</span></td>
+                        <td><span t-field="doc.dest_location_id"/></td>
+                      </tr>
+                      <tr>
+                        <td style="border-right: 1px solid;"><span>Tipo de albarán</span></td>
+                        <td><span t-field="doc.picking_type_id"/></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <h4>Productos</h4>
+              <table>
+                <tr>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Producto</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Especificaciones</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Existencia</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Cantidad solicitada</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Cantidad ordenada</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Cantidad surtida</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Proveedor sugerido</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Cuenta analítica</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Ubicación de origen</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid;"><b>Transferencia</b></td>
+                  <td style="border-top: 2px solid; border-bottom: 2px solid; border-left: 1px solid; border-right: 1px solid;"><b>Orden de compra</b></td>
+                </tr>
+                <tr t-foreach="doc.product_ids" t-as="line">
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.product_id"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.specs"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.on_hand"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.requested_qty"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.ordered_qty"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.supplied_qty"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.suggested_supplier"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.account_analytic_id"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.src_location_id"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid;"><span t-field="line.stock_picking_id"/></td>
+                  <td style="border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid;"><span t-field="line.purchase_order_id"/></td>
+                </tr>
+              </table>
+            </div>
+          </t>
+        </t>
+      </t>
+    </template>
+  </data>
+</openerp>

@@ -20,7 +20,7 @@
 
 {
     'name': 'Warehouse Req',
-    'version': '1.11',
+    'version': '1.12',
     'author': 'Humanytek',
     'website': 'http://humanytek.com',
     'depends': [
@@ -29,6 +29,7 @@
         'stock',
     ],
     'data': [
+        'reports/warehouse_req.xml',
         'data/ir_sequence_data.xml',
         'security/ir.model.access.csv',
         'security/warehouse_req_access_rules.xml',
