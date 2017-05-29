@@ -20,7 +20,7 @@
 
 {
     'name': 'Warehouse Req',
-    'version': '1.10',
+    'version': '1.11',
     'author': 'Humanytek',
     'website': 'http://humanytek.com',
     'depends': [
