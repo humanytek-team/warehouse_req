@@ -191,6 +191,11 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def action_cancel(self):
+        for line in self.product_ids:
+            if line.stock_picking_id:
+                raise exceptions.Warning(_("The product {} has stock picking".format(line.product_id.name)))
+            if line.purchase_order_id:
+                raise exceptions.Warning(_("The product {} has purchase order".format(line.product_id.name)))
         self.state = 'cancel'
 
     @api.multi

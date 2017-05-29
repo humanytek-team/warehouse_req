@@ -7,6 +7,9 @@
         <record model="res.groups" id="admin">
             <field name="name">Warehouse Requirements / Admin</field>
         </record>
+        <record model="res.groups" id="canceler">
+            <field name="name">Warehouse Requirements / Canceler</field>
+        </record>
 
         <record model="ir.rule" id="only_claimant_can_modify" >
             <field name="name">Only claimant can modify Requirement</field>
