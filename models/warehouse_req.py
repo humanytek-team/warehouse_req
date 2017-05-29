@@ -267,3 +267,20 @@ class WarehouseReq(models.Model):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('warehouse.req')
         return super(WarehouseReq, self).create(vals)
+
+    @api.multi
+    def copy(self, default=None):
+        default = dict(default or {})
+        default['state'] = 'draft'
+        default['product_ids'] = []
+        for line in self.product_ids:
+            line_dict = {
+                'product_id': line.product_id.id,
+                'specs': line.specs,
+                'requested_qty': line.requested_qty,
+                'suggested_supplier': line.suggested_supplier.id,
+                'account_analytic_id': line.account_analytic_id.id,
+                'src_location_id': line.src_location_id.id,
+            }
+            default['product_ids'].append((0, 0, line_dict))
+        return super(WarehouseReq, self).copy(default)
