@@ -117,6 +117,9 @@ class WarehouseReq(models.Model):
 
     @api.multi
     def check_areas(self):
+        if self.env.uid == SUPERUSER_ID:
+            self.action_approve()
+            return
         approver_areas = {group.name[len(approver_string):] for group in self.env.user.groups_id if group.name[:len(approver_string)] == approver_string}
         claimant_areas = {group.name[len(claimant_string):] for group in self.env['res.users'].browse(self.claimant_id.id).groups_id if group.name[:len(claimant_string)] == claimant_string}
         if len(claimant_areas & approver_areas):
@@ -158,7 +161,7 @@ class WarehouseReq(models.Model):
     def action_approve(self):
         if self.env.uid != SUPERUSER_ID and self.env.uid == self.claimant_id.id:
             raise exceptions.ValidationError(_('You can not approve your own requirements'))
-        self.approver_id = lambda self: self.env.uid
+        self.approver_id = self.env.uid
         self.state = 'approved'
 
     @api.multi
