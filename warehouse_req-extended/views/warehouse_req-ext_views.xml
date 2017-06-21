@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="warehouse_req_form_view-ext" model="ir.ui.view">
+      <field name="name">warehouse.req.form</field>
+      <field name="model">warehouse.req</field>
+      <field name="inherit_id" ref="warehouse_req.warehouse_req_form_view"/>
+      <field name="arch" type="xml">
+      <xpath expr="//field[@name='deliver_address']" position="after">
+          <field name="product_type_req" string="Product Type" attrs="{'readonly':[('state', 'not in', ['draft','required'])]}"/>
+      </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="warehouse_req_tree_view-ext">
+      <field name="name">warehouse.req.form</field>
+      <field name="model">warehouse.req</field>
+      <field name="inherit_id" ref="warehouse_req.warehouse_req_tree_view"/>
+      <field name="arch" type="xml">
+      <xpath expr="//field[@name='requested_products_qty']" position="after">
+	        <field name="product_type_req" string="Product Type"/>
+      </xpath>
+      </field>
+    </record>
+    
+    <!--Add another submenu at Inventory/Inventory Control/Repaired Products-->
+    <record model="ir.actions.act_window" id="warehouse_req_list_action2">
+      <field name="name">Repaired Products</field>
+      <field name="res_model">warehouse.req</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <data>
+      <menuitem id="warehouse_req_menu2"
+                name="Repaired Products"
+                parent="stock.menu_stock_inventory_control"
+                action="warehouse_req_list_action2"/>
+    </data>
+
+  </data>
+</odoo>
