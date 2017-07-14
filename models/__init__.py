@@ -18,5 +18,6 @@
 #
 ##############################################################################
 
+from . import stock_picking
 from . import warehouse_req
 from . import warehouse_req_product

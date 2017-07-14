@@ -27,6 +27,7 @@
         'account',
         'purchase',
         'stock',
+        'stock_move_entries',
     ],
     'data': [
         'reports/warehouse_req.xml',
