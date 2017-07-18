@@ -6,7 +6,7 @@ class StockPicking(models.Model):
 
     @api.multi
     def do_new_transfer(self):
-        super(StockPicking, self).do_new_transfer()
+        res = super(StockPicking, self).do_new_transfer()
         for pick in self:
             warehouse_req_id = self.env['warehouse.req'].search([('name', '=', pick.origin)], limit=1)
             if warehouse_req_id:
@@ -17,3 +17,4 @@ class StockPicking(models.Model):
                         account_move_lines = pick.env['account.move.line'].search([('stock_move_id', 'in', stock_move_ids)])
                         for account_move_line in account_move_lines:
                             account_move_line.analytic_account_id = account_analytic_id
+        return res
