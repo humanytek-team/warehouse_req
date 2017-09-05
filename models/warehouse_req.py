@@ -201,18 +201,18 @@ class WarehouseReq(models.Model):
                 raise exceptions.Warning(_("The product {} has purchase order".format(line.product_id.name)))
         self.state = 'cancel'
 
-    @api.multi
-    def generate_purchase_orders(self):
+    def _get_suppliers(self):
         suppliers = {}
         for p in self.product_ids:
             if p.product_id.seller_ids and p.product_id.seller_ids[0]:
                 suppliers[p.product_id.seller_ids[0].name.id] = ''
+            elif p.product_id.bom_count >= 1:
+                pass
             else:
-                raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
-            if p.ordered_qty < 0:
-                raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(p.product_id.name))
-            if p.on_hand + p.ordered_qty < p.requested_qty:
-                raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
+                raise exceptions.ValidationError(_('The product {} has no supplier and cannot be manufactured').format(p.product_id.name))
+        return suppliers
+
+    def _create_purchase_order(self, suppliers):
         for k, v in suppliers.iteritems():
             purchase_order_dict = {
                 'date_planned': self.date_required,
@@ -221,38 +221,50 @@ class WarehouseReq(models.Model):
                 'origin': self.name,
             }
             suppliers[k] = self.env['purchase.order'].create(purchase_order_dict)
+        return suppliers
+
+    def _create_purchase_orders(self, purchase_orders):
         for p in self.product_ids:
             if p.ordered_qty == 0:
                 continue
-            p.purchase_order_id = suppliers[p.product_id.seller_ids[0].name.id].id
-            purchase_order_line_dict = {
-                'date_planned': self.date_required,
-                'account_analytic_id': p.account_analytic_id and p.account_analytic_id.id or False,
-                'name': p.product_id.name,
-                'order_id': suppliers[p.product_id.seller_ids[0].name.id].id,
-                'price_unit': p.product_id.seller_ids[0].price,
-                'product_id': p.product_id.id,
-                'product_qty': p.ordered_qty,
-                'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
-            }
-            purchase_order_line = self.env['purchase.order.line'].create(purchase_order_line_dict)
-            purchase_order_line.taxes_id = p.product_id.supplier_taxes_id
-            p.purchase_order_id.fiscal_position_id = p.product_id.seller_ids[0].name.property_account_position_id.id
-            p.purchase_order_id.currency_id = p.product_id.seller_ids[0].name.property_purchase_currency_id
+            if p.product_id.seller_ids and p.product_id.seller_ids[0]:
+                p.purchase_order_id = purchase_orders[p.product_id.seller_ids[0].name.id].id
+                purchase_order_line_dict = {
+                    'date_planned': self.date_required,
+                    'account_analytic_id': p.account_analytic_id and p.account_analytic_id.id or False,
+                    'name': p.product_id.name,
+                    'order_id': purchase_orders[p.product_id.seller_ids[0].name.id].id,
+                    'price_unit': p.product_id.seller_ids[0].price,
+                    'product_id': p.product_id.id,
+                    'product_qty': p.ordered_qty,
+                    'product_uom': p.product_id.uom_po_id.id or p.product_id.uom_id.id,
+                }
+                purchase_order_line = self.env['purchase.order.line'].create(purchase_order_line_dict)
+                purchase_order_line.taxes_id = p.product_id.supplier_taxes_id
+                p.purchase_order_id.fiscal_position_id = p.product_id.seller_ids[0].name.property_account_position_id.id
+                p.purchase_order_id.currency_id = p.product_id.seller_ids[0].name.property_purchase_currency_id
+
+    @api.multi
+    def generate_purchase_orders(self):
+        purchase_orders = self._create_purchase_order(self._get_suppliers())
+        for p in self.product_ids:
+            if p.on_hand + p.ordered_qty < p.requested_qty:
+                raise exceptions.ValidationError(_('The product {} has no enough stock').format(p.product_id.name))
+        self._create_purchase_orders(purchase_orders)
         self.ordered = True
 
     @api.multi
     def generate_stock_picks(self):
         for p in self.product_ids:
-            if not (p.product_id.seller_ids and p.product_id.seller_ids[0]):
-                raise exceptions.ValidationError(_('The product {} has no supplier').format(p.product_id.name))
+            if not (p.product_id.seller_ids and p.product_id.seller_ids[0]) and not p.product_id.bom_count:
+                raise exceptions.ValidationError(_('The product {} has no supplier and cannot be manufactured').format(p.product_id.name))
         for p in self.product_ids:
             stock_picking_dict = {
                 'location_id': p.src_location_id.id,
                 'location_dest_id': self.dest_location_id.id,
                 'min_date': self.date_required,
                 'origin': self.name,
-                'partner_id': p.product_id.seller_ids[0].name.id,
+                'partner_id': p.product_id.seller_ids and p.product_id.seller_ids[0] or False,
                 'picking_type_id': self.picking_type_id.id,
             }
             p.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
