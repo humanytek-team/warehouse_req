@@ -91,4 +91,10 @@ class WarehouseReqProduct(models.Model):
     def _check_requested_qty_gt_0(self):
             for r in self:
                 if r.requested_qty <= 0:
+                    raise exceptions.ValidationError(_('The product {} has invalid requested qty').format(r.product_id.name))
+
+    @api.constrains('ordered_qty')
+    def _check_ordered_qty_ge_0(self):
+            for r in self:
+                if r.ordered_qty < 0:
                     raise exceptions.ValidationError(_('The product {} has invalid ordered qty').format(r.product_id.name))
