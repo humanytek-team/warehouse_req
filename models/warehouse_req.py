@@ -264,7 +264,7 @@ class WarehouseReq(models.Model):
                 'location_dest_id': self.dest_location_id.id,
                 'min_date': self.date_required,
                 'origin': self.name,
-                'partner_id': p.product_id.seller_ids and p.product_id.seller_ids[0] or False,
+                'partner_id': p.product_id.seller_ids and p.product_id.seller_ids[0].name.id or False,
                 'picking_type_id': self.picking_type_id.id,
             }
             p.stock_picking_id = self.env['stock.picking'].create(stock_picking_dict)
