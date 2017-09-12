@@ -520,3 +520,9 @@ msgstr "warehouse.req"
 #: model:ir.model,name:warehouse_req.model_warehouse_req_product
 msgid "warehouse.req.product"
 msgstr "warehouse.req.product"
+
+#. module: warehouse_req
+#: code:addons/warehouse_req/models/warehouse_req.py:297
+#, python-format
+msgid "You can not copy this requirement, only draft or required are allowed!"
+msgstr "No puedes copiar este requerimiento, solo se permite borrador o solicitado"
