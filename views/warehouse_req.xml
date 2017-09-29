@@ -101,7 +101,8 @@
       <field name="name">warehouse.req.form</field>
       <field name="model">warehouse.req</field>
       <field name="arch" type="xml">
-        <tree string="Requeriments Tree">
+        <tree string="Requeriments Tree" default_order="id desc">
+          <field name="id" invisible="1"/>
           <field name="claimant_id"/>
           <field name="dest_location_id"/>
           <field name="name"/>
